@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir:*)",
+      "Bash(npm test:*)",
+      "Bash(npm install)",
+      "Bash(npm run migrate:*)",
+      "Bash(taskkill:*)",
+      "Bash(timeout 60 npm test)",
+      "Bash(timeout 10 npm test -- --testNamePattern=\"devrait créer un nouveau professeur\")"
+    ],
+    "deny": []
+  }
+}
