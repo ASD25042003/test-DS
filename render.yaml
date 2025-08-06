@@ -10,8 +10,6 @@ services:
         value: production
       - key: PORT
         value: 3000
-      - key: RUN_MIGRATIONS
-        value: false
       # Variables à configurer dans Render Dashboard:
       # SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY
       # WASABI_ACCESS_KEY, WASABI_SECRET_KEY, WASABI_BUCKET, WASABI_REGION

@@ -66,8 +66,11 @@ cp .env.example .env
 ### 3. Base de données
 
 ```bash
-# Appliquer les migrations
-npm run migrate
+# Exécuter manuellement les migrations SQL dans Supabase:
+# 1. backend/migrations/mig-1.sql (tables principales)
+# 2. backend/migrations/mig-2.sql (triggers et fonctions)
+# 3. backend/migrations/mig-3.sql (données initiales)
+# 4. backend/migrations/mig-4.sql (optimisations)
 ```
 
 ### 4. Démarrage
@@ -98,9 +101,9 @@ npm test
 
 ### 🔄 Frontend - À venir
 
-- Interface web moderne (HTML5/CSS3/JS)
+- Interface web moderne (HTML5/CSS3/JS/talwind(cdn))
 - Dashboard intuitif
-- Interface mobile responsive
+- Interface mobile first responsive
 - Intégration API backend
 
 ## 🛠️ Technologies

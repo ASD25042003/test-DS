@@ -55,7 +55,8 @@ Voici la structure complète des fichiers et dossiers du projet.
 │   │   ├── profil.js
 │   │   └── ressources.js
 │   ├── scripts/
-│   │   └── migrate.js
+│   │   ├── build.sh
+│   │   └── start.sh
 │   ├── server.js
 │   ├── services/
 │   │   ├── auth.js

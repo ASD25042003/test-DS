@@ -18,11 +18,5 @@ fi
 
 echo "✅ Variables d'environnement OK"
 
-# Appliquer les migrations si nécessaire
-if [ "$RUN_MIGRATIONS" = "true" ]; then
-  echo "🗄️ Application des migrations..."
-  npm run migrate
-fi
-
 echo "🎯 Démarrage du serveur sur le port $PORT..."
 npm start

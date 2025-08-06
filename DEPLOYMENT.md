@@ -55,9 +55,6 @@ JWT_EXPIRES_IN=7d
 # Upload
 MAX_FILE_SIZE=50MB
 ALLOWED_FILE_TYPES=pdf,docx,txt,jpg,jpeg,png,gif,mp4,avi,mov
-
-# Optional: Migrations
-RUN_MIGRATIONS=false
 ```
 
 ### Étape 4 : Configuration avancée
@@ -84,10 +81,13 @@ RUN_MIGRATIONS=false
    # Doit retourner les infos de l'API
    ```
 
-3. **Appliquer les migrations** (si nécessaire)
-   - Définir `RUN_MIGRATIONS=true` temporairement
-   - Redéployer
-   - Remettre à `false` après
+3. **Configurer la base de données manuellement**
+   - Aller sur votre dashboard Supabase
+   - Exécuter les fichiers SQL dans l'ordre :
+     * `backend/migrations/mig-1.sql` (tables principales)
+     * `backend/migrations/mig-2.sql` (triggers et fonctions)
+     * `backend/migrations/mig-3.sql` (données initiales)
+     * `backend/migrations/mig-4.sql` (optimisations)
 
 ## 📊 Monitoring
 

@@ -1,0 +1,122 @@
+/* CSS principal commun - Variables CSS, styles globaux, thème UI/UX */
+
+/* Variables CSS personnalisées inspirées d'Anthropic */
+:root {
+  /* Tons de beige - Base neutre */
+  --color-beige-50: #fefdfb;     /* Blanc cassé */
+  --color-beige-100: #f7f5f0;    /* Beige très clair */
+  --color-beige-200: #f0ebe0;    /* Beige clair */
+  --color-beige-300: #e8ddd0;    /* Beige moyen */
+  --color-beige-400: #d4c4a8;    /* Beige soutenu */
+  --color-beige-500: #b8a082;    /* Beige foncé */
+
+  /* Accents noirs - Texte et contraste */
+  --color-gray-900: #1a1a1a;     /* Noir principal */
+  --color-gray-800: #2d2d2d;     /* Gris très foncé */
+  --color-gray-700: #404040;     /* Gris foncé */
+  --color-gray-600: #525252;     /* Gris moyen */
+  --color-gray-500: #737373;     /* Gris clair */
+  --color-gray-400: #a3a3a3;     /* Gris très clair */
+
+  /* Couleurs de touches - Accents colorés */
+  --color-accent-primary: #d97706;    /* Orange doux */
+  --color-accent-secondary: #059669;  /* Vert sauge */
+  --color-accent-tertiary: #7c3aed;   /* Violet subtil */
+  --color-accent-info: #0ea5e9;       /* Bleu calme */
+  --color-accent-warning: #f59e0b;    /* Jaune miel */
+  --color-accent-danger: #dc2626;     /* Rouge discret */
+}
+
+/* Styles globaux de base */
+body {
+  font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  background-color: var(--color-beige-50);
+  color: var(--color-gray-700);
+  line-height: 1.6;
+}
+
+/* Classes utilitaires personnalisées */
+.transition-smooth {
+  transition: all 0.2s ease;
+}
+
+.hover-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* Composants UI réutilisables */
+
+/* Cartes */
+.card {
+  background: var(--color-beige-100);
+  border: 1px solid var(--color-beige-200);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.card:hover {
+  border-color: var(--color-beige-300);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
+}
+
+/* Boutons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--color-accent-primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #b45309;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(217, 119, 6, 0.25);
+}
+
+.btn-secondary {
+  background: var(--color-beige-200);
+  color: var(--color-gray-800);
+  border: 1px solid var(--color-beige-300);
+}
+
+.btn-secondary:hover {
+  background: var(--color-beige-300);
+  border-color: var(--color-beige-400);
+}
+
+/* Formulaires */
+.form-input {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  font-size: 1rem;
+  background: var(--color-beige-50);
+  border: 1px solid var(--color-beige-300);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--color-accent-primary);
+  background: white;
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.1);
+}

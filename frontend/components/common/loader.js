@@ -1,0 +1,1 @@
+// Composant indicateur de chargement

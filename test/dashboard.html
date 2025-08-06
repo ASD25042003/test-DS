@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Diagana School</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-beige-50: #fefdfb;
+            --color-beige-100: #f7f5f0;
+            --color-beige-200: #f0ebe0;
+            --color-beige-300: #e8ddd0;
+            --color-beige-400: #d4c4a8;
+            --color-accent-primary: #d97706;
+            --color-accent-secondary: #059669;
+            --color-accent-info: #0ea5e9;
+            --color-gray-900: #1a1a1a;
+            --color-gray-800: #2d2d2d;
+            --color-gray-700: #404040;
+            --color-gray-500: #737373;
+            --color-gray-400: #a3a3a3;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            background: var(--color-beige-50);
+            color: var(--color-gray-700);
+        }
+
+        .navbar {
+            background: rgba(254, 253, 251, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--color-beige-200);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .nav-brand {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--color-gray-900);
+            text-decoration: none;
+        }
+
+        .nav-link {
+            color: var(--color-gray-600);
+            font-weight: 500;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--color-gray-900);
+            background: var(--color-beige-100);
+        }
+
+        .nav-link.active {
+            color: var(--color-accent-primary);
+            background: rgba(217, 119, 6, 0.1);
+        }
+
+        .card {
+            background: var(--color-beige-100);
+            border: 1px solid var(--color-beige-200);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
+        }
+
+        .card:hover {
+            border-color: var(--color-beige-300);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+            transform: translateY(-1px);
+        }
+
+        .card-header {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--color-beige-200);
+        }
+
+        .resource-card {
+            background: var(--color-beige-100);
+            border: 1px solid var(--color-beige-200);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .resource-card:hover {
+            border-color: var(--color-accent-primary);
+            box-shadow: 0 8px 25px -5px rgba(217, 119, 6, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .resource-type-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            background: rgba(217, 119, 6, 0.1);
+            color: var(--color-accent-primary);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .user-avatar {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            background: var(--color-beige-300);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--color-gray-700);
+        }
+
+        .btn-primary {
+            background: var(--color-accent-primary);
+            color: white;
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background: #b45309;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(217, 119, 6, 0.25);
+        }
+
+        .btn-secondary {
+            background: var(--color-beige-200);
+            color: var(--color-gray-800);
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--color-beige-300);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-secondary:hover {
+            background: var(--color-beige-300);
+            border-color: var(--color-beige-400);
+        }
+
+        .stats-card {
+            text-align: center;
+        }
+
+        .stats-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--color-gray-900);
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="max-w-6xl mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="#" class="nav-brand">📚 Diagana School</a>
+                
+                <div class="flex space-x-1">
+                    <a href="#" class="nav-link active">🏠 Accueil</a>
+                    <a href="resources.html" class="nav-link">📁 Ressources</a>
+                    <a href="collections.html" class="nav-link">📚 Collections</a>
+                    <a href="#" class="nav-link">👥 Profils</a>
+                </div>
+                
+                <div class="flex items-center space-x-3">
+                    <div class="user-avatar" style="width: 2.5rem; height: 2.5rem;">JD</div>
+                    <div class="text-sm">
+                        <div style="color: var(--color-gray-900); font-weight: 500;">Jean Dupont</div>
+                        <div style="color: var(--color-gray-500);">Professeur</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <main class="max-w-6xl mx-auto px-6 py-8">
+        
+        <!-- Header avec salutation -->
+        <div class="mb-8 animate-fade-in">
+            <h1 class="text-3xl font-bold mb-2" style="color: var(--color-gray-900);">
+                Bonjour Jean ! 👋
+            </h1>
+            <p style="color: var(--color-gray-500); font-size: 1.1rem;">
+                Voici un aperçu de votre activité sur Diagana School
+            </p>
+        </div>
+
+        <!-- Statistiques rapides -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="card stats-card animate-fade-in">
+                <div class="stats-number" style="color: var(--color-accent-primary);">25</div>
+                <div style="color: var(--color-gray-500);">Ressources créées</div>
+            </div>
+            <div class="card stats-card animate-fade-in">
+                <div class="stats-number" style="color: var(--color-accent-secondary);">8</div>
+                <div style="color: var(--color-gray-500);">Collections</div>
+            </div>
+            <div class="card stats-card animate-fade-in">
+                <div class="stats-number" style="color: var(--color-accent-info);">340</div>
+                <div style="color: var(--color-gray-500);">Vues totales</div>
+            </div>
+            <div class="card stats-card animate-fade-in">
+                <div class="stats-number" style="color: var(--color-accent-primary);">127</div>
+                <div style="color: var(--color-gray-500);">Likes reçus</div>
+            </div>
+        </div>
+
+        <!-- Sections principales -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Ressources récentes -->
+            <div class="lg:col-span-2">
+                <div class="card animate-fade-in">
+                    <div class="card-header">
+                        <div class="flex justify-between items-center">
+                            <h2 class="text-xl font-semibold" style="color: var(--color-gray-900);">
+                                📁 Ressources récentes
+                            </h2>
+                            <a href="resources.html" class="btn-secondary">Voir tout</a>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Resource Card 1 -->
+                        <div class="resource-card">
+                            <div class="flex justify-between items-start mb-4">
+                                <span class="resource-type-badge">📄 Document</span>
+                                <span class="text-sm" style="color: var(--color-gray-500);">Il y a 2 heures</span>
+                            </div>
+                            
+                            <h3 class="text-lg font-semibold mb-2" style="color: var(--color-gray-900);">
+                                Cours d'algèbre - Niveau 3ème
+                            </h3>
+                            <p class="text-sm mb-4" style="color: var(--color-gray-500);">
+                                Introduction aux équations du second degré avec exercices pratiques et corrections détaillées.
+                            </p>
+                            
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center space-x-2">
+                                    <div class="user-avatar" style="width: 2rem; height: 2rem;">JD</div>
+                                    <span class="text-sm" style="color: var(--color-gray-600);">Jean Dupont</span>
+                                </div>
+                                
+                                <div class="flex space-x-4 text-sm" style="color: var(--color-gray-500);">
+                                    <span>👍 12</span>
+                                    <span>💬 3</span>
+                                    <span>👁 89</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Resource Card 2 -->
+                        <div class="resource-card">
+                            <div class="flex justify-between items-start mb-4">
+                                <span class="resource-type-badge" style="background: rgba(5, 150, 105, 0.1); color: var(--color-accent-secondary);">
+                                    🖼️ Image
+                                </span>
+                                <span class="text-sm" style="color: var(--color-gray-500);">Hier</span>
+                            </div>
+                            
+                            <h3 class="text-lg font-semibold mb-2" style="color: var(--color-gray-900);">
+                                Schémas de géométrie plane
+                            </h3>
+                            <p class="text-sm mb-4" style="color: var(--color-gray-500);">
+                                Collection de schémas pour illustrer les propriétés des triangles et cercles.
+                            </p>
+                            
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center space-x-2">
+                                    <div class="user-avatar" style="width: 2rem; height: 2rem;">JD</div>
+                                    <span class="text-sm" style="color: var(--color-gray-600);">Jean Dupont</span>
+                                </div>
+                                
+                                <div class="flex space-x-4 text-sm" style="color: var(--color-gray-500);">
+                                    <span>👍 8</span>
+                                    <span>💬 1</span>
+                                    <span>👁 45</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Resource Card 3 -->
+                        <div class="resource-card">
+                            <div class="flex justify-between items-start mb-4">
+                                <span class="resource-type-badge" style="background: rgba(14, 165, 233, 0.1); color: var(--color-accent-info);">
+                                    🎥 Vidéo
+                                </span>
+                                <span class="text-sm" style="color: var(--color-gray-500);">Il y a 2 jours</span>
+                            </div>
+                            
+                            <h3 class="text-lg font-semibold mb-2" style="color: var(--color-gray-900);">
+                                Résolution d'équations - Méthode pas à pas
+                            </h3>
+                            <p class="text-sm mb-4" style="color: var(--color-gray-500);">
+                                Vidéo explicative pour résoudre les équations du premier degré étape par étape.
+                            </p>
+                            
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center space-x-2">
+                                    <div class="user-avatar" style="width: 2rem; height: 2rem;">JD</div>
+                                    <span class="text-sm" style="color: var(--color-gray-600);">Jean Dupont</span>
+                                </div>
+                                
+                                <div class="flex space-x-4 text-sm" style="color: var(--color-gray-500);">
+                                    <span>👍 24</span>
+                                    <span>💬 7</span>
+                                    <span>👁 156</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar avec actions rapides et collections -->
+            <div class="space-y-6">
+                
+                <!-- Actions rapides -->
+                <div class="card animate-fade-in">
+                    <div class="card-header">
+                        <h2 class="text-lg font-semibold" style="color: var(--color-gray-900);">
+                            ⚡ Actions rapides
+                        </h2>
+                    </div>
+
+                    <div class="space-y-3">
+                        <a href="#" class="btn-primary block text-center">
+                            📄 Nouvelle ressource
+                        </a>
+                        <a href="#" class="btn-secondary block text-center">
+                            📚 Créer une collection
+                        </a>
+                        <a href="#" class="btn-secondary block text-center">
+                            👥 Parcourir les profils
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Collections populaires -->
+                <div class="card animate-fade-in">
+                    <div class="card-header">
+                        <h2 class="text-lg font-semibold" style="color: var(--color-gray-900);">
+                            🔥 Collections populaires
+                        </h2>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="border-l-4 pl-3" style="border-color: var(--color-accent-primary);">
+                            <h4 class="font-medium" style="color: var(--color-gray-900);">Mathématiques 3ème</h4>
+                            <p class="text-sm" style="color: var(--color-gray-500);">15 ressources • 89 vues</p>
+                        </div>
+                        
+                        <div class="border-l-4 pl-3" style="border-color: var(--color-accent-secondary);">
+                            <h4 class="font-medium" style="color: var(--color-gray-900);">Sciences Physiques</h4>
+                            <p class="text-sm" style="color: var(--color-gray-500);">23 ressources • 156 vues</p>
+                        </div>
+                        
+                        <div class="border-l-4 pl-3" style="border-color: var(--color-accent-info);">
+                            <h4 class="font-medium" style="color: var(--color-gray-900);">Français Littérature</h4>
+                            <p class="text-sm" style="color: var(--color-gray-500);">31 ressources • 203 vues</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <a href="collections.html" class="text-sm font-medium" style="color: var(--color-accent-primary);">
+                            Voir toutes les collections →
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Activité récente -->
+                <div class="card animate-fade-in">
+                    <div class="card-header">
+                        <h2 class="text-lg font-semibold" style="color: var(--color-gray-900);">
+                            📈 Activité récente
+                        </h2>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-2 h-2 rounded-full" style="background: var(--color-accent-primary);"></div>
+                            <div class="text-sm">
+                                <span style="color: var(--color-gray-700);">Marie Dubois</span>
+                                <span style="color: var(--color-gray-500);">a aimé votre ressource</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center space-x-3">
+                            <div class="w-2 h-2 rounded-full" style="background: var(--color-accent-secondary);"></div>
+                            <div class="text-sm">
+                                <span style="color: var(--color-gray-700);">Pierre Martin</span>
+                                <span style="color: var(--color-gray-500);">a commenté votre collection</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center space-x-3">
+                            <div class="w-2 h-2 rounded-full" style="background: var(--color-accent-info);"></div>
+                            <div class="text-sm">
+                                <span style="color: var(--color-gray-700);">Sophie Leroy</span>
+                                <span style="color: var(--color-gray-500);">vous suit maintenant</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Animation au scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-fade-in').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+            observer.observe(el);
+        });
+
+        // Animation hover sur les cartes de ressource
+        document.querySelectorAll('.resource-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>
