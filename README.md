@@ -1,20 +1,134 @@
 # 📚 Diagana School - Plateforme Éducative
 
-> **Statut :** ✅ Backend complet et fonctionnel (100% des tests passent)
+Une plateforme éducative moderne et intuitive conçue avec un design **mobile-first** inspiré d'Anthropic.
 
-## 🎯 À propos
+> **Démo Live :** [https://asd25042003.github.io/test-ds/](https://asd25042003.github.io/test-ds/)
 
-**Diagana School** est une plateforme web centralisée pour la gestion des ressources pédagogiques dans un établissement scolaire. Elle permet aux professeurs et aux élèves de partager, organiser et accéder facilement à une variété de ressources éducatives.
+## 🌟 Fonctionnalités
 
-### ✅ Fonctionnalités principales
+### ✨ Interface Utilisateur
+- **Design mobile-first** optimisé pour tous les appareils
+- **Palette de couleurs** beige/crème avec accents orange, vert, bleu, violet
+- **Animations fluides** et interactions visuelles
+- **Interface responsive** avec Tailwind CSS
 
-- 🔐 **Authentification sécurisée** avec clés d'inscription
-- 📁 **Gestion des ressources** (documents, médias, liens)
-- 📚 **Collections** pour organiser les ressources
-- 👥 **Profils utilisateurs** avec système de suivi social
-- 💬 **Commentaires** et interactions (likes, favoris)
-- 🔍 **Recherche avancée** multi-critères
-- 📊 **Statistiques** d'utilisation en temps réel
+### 🔧 Pages Disponibles
+
+#### 🏠 Landing Page (`index.html`)
+- Page d'accueil attrayante avec sections Hero, Fonctionnalités, À propos
+- Navigation smooth scroll
+- Design entièrement responsive
+
+#### 🔐 Authentification (`test/auth.html`)
+- Formulaires de connexion et inscription
+- **Connexion automatique** : accepte n'importe quelles informations
+- Redirection vers le dashboard après connexion
+- Animations et transitions fluides
+
+#### 📊 Dashboard (`test/dashboard.html`)
+- Tableau de bord principal avec statistiques
+- Cartes d'activités récentes
+- Actions rapides et collections populaires
+- Responsive design avec navigation mobile
+
+#### 📁 Ressources (`test/resources.html`)
+- Gestion et recherche de ressources éducatives
+- Filtres par type et matière
+- Système de tri avancé
+- Upload de documents, images, vidéos, liens
+
+#### 📚 Collections (`test/collections.html`)
+- Organisation en collections thématiques
+- Système de progression visuel avec anneaux
+- Badges de visibilité (public/privé)
+- Onglets de navigation (Toutes, Mes collections, Favoris, etc.)
+
+#### 👥 Profils (`test/profiles.html`)
+- Annuaire des membres (professeurs, étudiants, administrateurs)
+- Recherche et filtrage par rôle
+- Indicateurs de statut (en ligne/hors ligne)
+- Interface de messagerie
+
+## 🚀 Test en Direct
+
+### 🌐 GitHub Pages
+Le projet est déployé sur GitHub Pages :
+**[https://asd25042003.github.io/test-ds/](https://asd25042003.github.io/test-ds/)**
+
+### 📱 Test Mobile
+Pour tester l'interface mobile :
+1. Ouvrir le lien ci-dessus
+2. Utiliser les outils de développement du navigateur (F12)
+3. Activer la vue mobile ou utiliser un appareil mobile
+
+### 🔑 Connexion
+- **Connexion** : Accepte n'importe quelle adresse email et mot de passe
+- **Navigation** : Tous les liens entre les pages fonctionnent
+- **Mobile** : Interface entièrement optimisée
+
+### 📋 Instructions de Test
+
+#### 1. Accès Direct
+Aller sur : **https://asd25042003.github.io/test-ds/**
+
+#### 2. Navigation
+- **Landing** : Cliquer sur "Commencer maintenant"
+- **Connexion** : Entrer n'importe quelles informations
+- **Dashboard** : Explorer les différentes sections
+- **Navigation** : Utiliser les liens de navigation
+
+#### 3. Test Mobile
+- Réduire la taille de la fenêtre ou utiliser un mobile
+- Tester le menu hamburger
+- Vérifier la responsivité de toutes les pages
+
+### 🔍 Fonctionnalités Interactives
+
+- ✅ **Connexion automatique** (test/auth.html)
+- ✅ **Navigation fluide** entre toutes les pages
+- ✅ **Recherche et filtres** fonctionnels
+- ✅ **Animations au scroll** et interactions
+- ✅ **Menu mobile** avec hamburger
+- ✅ **Boutons flottants** (FAB)
+- ✅ **États visuels** (hover, focus, active)
+
+## 🌎 Technologies Frontend Test
+
+- **HTML5** - Structure moderne
+- **Tailwind CSS** - Framework CSS utility-first
+- **JavaScript Vanilla** - Interactions et animations
+- **Inter Font** - Typographie moderne
+- **Mobile-First Design** - Optimisation prioritaire mobile
+
+## 📁 Structure des Pages Test
+
+```
+diagana-school/
+├── index.html                 # Landing page principale
+├── test/                      # Pages de démonstration
+│   ├── auth.html             # Authentification
+│   ├── dashboard.html        # Tableau de bord
+│   ├── resources.html        # Gestion des ressources
+│   ├── collections.html      # Collections thématiques
+│   └── profiles.html         # Profils utilisateurs
+├── frontend/                 # Code frontend (structure avancée)
+├── backend/                  # Code backend (Node.js/Express)
+└── docs/                     # Documentation
+```
+
+### 🎨 Design System
+
+#### Couleurs
+- **Base** : Beige (#fefdfb, #f7f5f0, #f0ebe0)
+- **Accent Principal** : Orange (#d97706)
+- **Accent Secondaire** : Vert (#059669)
+- **Accent Info** : Bleu (#0ea5e9)
+- **Accent Tertiaire** : Violet (#7c3aed)
+
+#### Breakpoints
+- **Mobile** : < 768px
+- **Tablet** : 768px - 1024px
+- **Desktop** : > 1024px
 
 ## 🏗️ Architecture
 
