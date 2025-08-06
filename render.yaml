@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: diagana-school-backend
+    env: node
+    buildCommand: cd backend && npm ci
+    startCommand: cd backend && npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: RUN_MIGRATIONS
+        value: false
+      # Variables à configurer dans Render Dashboard:
+      # SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY
+      # WASABI_ACCESS_KEY, WASABI_SECRET_KEY, WASABI_BUCKET, WASABI_REGION
+      # JWT_SECRET, JWT_EXPIRES_IN
+    
+  # Future: Frontend static site
+  # - type: static
+  #   name: diagana-school-frontend
+  #   buildCommand: npm run build
+  #   staticPublishPath: ./build
