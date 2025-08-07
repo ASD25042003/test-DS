@@ -1,12 +1,15 @@
+
+
 ons vas commencer a planifier le frontend 
 pour cela :
 
 # stack :
-html css js talwind  
+html css js talwind via cdn   
 
 # architecture :
 
 elle doit etre une interface SPA modulaire 
+
 
 frontend/
     api/
@@ -54,3 +57,18 @@ creer l'arborecence et les fichiers mais tu n'implemente rien laisse les fichier
 
 
 
+===============================================================
+
+- dans une session ulterieure je t'avais fait cette demande , ce que tu as fais voir frontend/.
+
+- je te ensuite demander un frontend de test voir test/ :
+
+apres avoir vu l'interface de test dans l'ensemble je suis satifait a 95% car ya des ajustement a faire .
+
+## ajustement ou changemment a faire :
+la barre de navigation nest pas reponsive et a dapter a la  version mobile voir image joint mobile/
+
+apres cette ajustement planifier limplementation complete du module auth dans le frontend 
+
+
+repondre en francais 

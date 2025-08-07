@@ -203,6 +203,143 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* Navigation mobile */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 100;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu-content {
+            background: var(--color-beige-50);
+            width: 280px;
+            height: 100%;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            padding: 2rem 1.5rem;
+        }
+
+        .mobile-menu.active .mobile-menu-content {
+            transform: translateX(0);
+        }
+
+        .mobile-nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            color: var(--color-gray-700);
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-nav-link:hover, .mobile-nav-link.active {
+            background: var(--color-beige-200);
+            color: var(--color-accent-primary);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--color-gray-700);
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        /* Bottom navigation mobile */
+        .bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--color-beige-50);
+            border-top: 1px solid var(--color-beige-200);
+            padding: 0.75rem 0;
+            z-index: 50;
+        }
+
+        .bottom-nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--color-gray-500);
+            padding: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .bottom-nav-item.active {
+            color: var(--color-accent-primary);
+        }
+
+        .bottom-nav-icon {
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .bottom-nav-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .navbar .flex.space-x-1 {
+                display: none;
+            }
+            
+            .hamburger {
+                display: flex;
+            }
+
+            .bottom-nav {
+                display: flex;
+            }
+
+            main {
+                padding-bottom: 6rem;
+            }
+
+            .navbar {
+                padding: 0.75rem 0;
+            }
+
+            .nav-brand {
+                font-size: 1.1rem;
+            }
+
+            .user-avatar {
+                width: 2rem;
+                height: 2rem;
+                font-size: 0.875rem;
+            }
+
+            .max-w-6xl {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+
         .fab {
             position: fixed;
             bottom: 2rem;
@@ -252,24 +389,81 @@
     <nav class="navbar">
         <div class="max-w-6xl mx-auto px-6 py-4">
             <div class="flex justify-between items-center">
-                <a href="dashboard.html" class="nav-brand">📚 Diagana School</a>
+                <div class="flex items-center space-x-3">
+                    <div class="hamburger" onclick="toggleMobileMenu()">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <a href="dashboard.html" class="nav-brand">📚 Diagana School</a>
+                </div>
                 
+                <!-- Desktop Navigation -->
                 <div class="flex space-x-1">
                     <a href="dashboard.html" class="nav-link">🏠 Accueil</a>
                     <a href="resources.html" class="nav-link">📁 Ressources</a>
                     <a href="#" class="nav-link active">📚 Collections</a>
-                    <a href="#" class="nav-link">👥 Profils</a>
+                    <a href="profiles.html" class="nav-link">👥 Profils</a>
                 </div>
                 
+                <!-- User Info -->
                 <div class="flex items-center space-x-3">
                     <div class="user-avatar" style="width: 2.5rem; height: 2.5rem;">JD</div>
-                    <div class="text-sm">
+                    <div class="text-sm hidden md:block">
                         <div style="color: var(--color-gray-900); font-weight: 500;">Jean Dupont</div>
                         <div style="color: var(--color-gray-500);">Professeur</div>
                     </div>
                 </div>
             </div>
         </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu" id="mobileMenu" onclick="closeMobileMenu(event)">
+        <div class="mobile-menu-content" onclick="event.stopPropagation()">
+            <div class="flex items-center space-x-3 mb-8">
+                <div class="user-avatar">JD</div>
+                <div>
+                    <div style="color: var(--color-gray-900); font-weight: 600;">Jean Dupont</div>
+                    <div style="color: var(--color-gray-500); font-size: 0.875rem;">Professeur</div>
+                </div>
+            </div>
+            
+            <div class="space-y-2">
+                <a href="dashboard.html" class="mobile-nav-link">
+                    <span class="text-lg mr-3">🏠</span> Accueil
+                </a>
+                <a href="resources.html" class="mobile-nav-link">
+                    <span class="text-lg mr-3">📁</span> Ressources
+                </a>
+                <a href="#" class="mobile-nav-link active">
+                    <span class="text-lg mr-3">📚</span> Collections
+                </a>
+                <a href="profiles.html" class="mobile-nav-link">
+                    <span class="text-lg mr-3">👥</span> Profils
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation Mobile -->
+    <nav class="bottom-nav">
+        <a href="dashboard.html" class="bottom-nav-item">
+            <div class="bottom-nav-icon">🏠</div>
+            <div class="bottom-nav-label">Accueil</div>
+        </a>
+        <a href="resources.html" class="bottom-nav-item">
+            <div class="bottom-nav-icon">📁</div>
+            <div class="bottom-nav-label">Ressources</div>
+        </a>
+        <a href="#" class="bottom-nav-item active">
+            <div class="bottom-nav-icon">📚</div>
+            <div class="bottom-nav-label">Collections</div>
+        </a>
+        <a href="profiles.html" class="bottom-nav-item">
+            <div class="bottom-nav-icon">👥</div>
+            <div class="bottom-nav-label">Profils</div>
+        </a>
     </nav>
 
     <!-- Contenu principal -->
@@ -780,6 +974,32 @@
 
         // Animer les progress rings au chargement
         window.addEventListener('load', animateProgressRings);
+
+        // Fonctions menu mobile
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+        }
+
+        function closeMobileMenu(event) {
+            if (event.target === event.currentTarget) {
+                const mobileMenu = document.getElementById('mobileMenu');
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Fermer le menu mobile avec la touche Escape
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const mobileMenu = document.getElementById('mobileMenu');
+                if (mobileMenu.classList.contains('active')) {
+                    mobileMenu.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            }
+        });
     </script>
 </body>
 </html>

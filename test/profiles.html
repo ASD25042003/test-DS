@@ -210,6 +210,105 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* Navigation mobile */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 100;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu-content {
+            background: var(--color-beige-50);
+            width: 280px;
+            height: 100%;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            padding: 2rem 1.5rem;
+        }
+
+        .mobile-menu.active .mobile-menu-content {
+            transform: translateX(0);
+        }
+
+        .mobile-nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            color: var(--color-gray-700);
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-nav-link:hover, .mobile-nav-link.active {
+            background: var(--color-beige-200);
+            color: var(--color-accent-primary);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--color-gray-700);
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        /* Bottom navigation mobile */
+        .bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--color-beige-50);
+            border-top: 1px solid var(--color-beige-200);
+            padding: 0.75rem 0;
+            z-index: 50;
+        }
+
+        .bottom-nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--color-gray-500);
+            padding: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .bottom-nav-item.active {
+            color: var(--color-accent-primary);
+        }
+
+        .bottom-nav-icon {
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .bottom-nav-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
         .fab {
             position: fixed;
             bottom: 2rem;
@@ -234,19 +333,41 @@
             box-shadow: 0 6px 20px rgba(217, 119, 6, 0.4);
         }
 
-        /* Mobile optimizations */
+        /* Responsive styles */
         @media (max-width: 768px) {
-            .mobile-nav-hidden {
+            .navbar .flex.space-x-1 {
                 display: none;
             }
+            
+            .hamburger {
+                display: flex;
+            }
 
-            .mobile-menu-btn {
-                display: block;
-                background: none;
-                border: none;
-                font-size: 1.5rem;
-                cursor: pointer;
-                color: var(--color-gray-700);
+            .bottom-nav {
+                display: flex;
+            }
+
+            main {
+                padding-bottom: 6rem;
+            }
+
+            .navbar {
+                padding: 0.75rem 0;
+            }
+
+            .nav-brand {
+                font-size: 1.1rem;
+            }
+
+            .user-avatar {
+                width: 2rem;
+                height: 2rem;
+                font-size: 0.875rem;
+            }
+
+            .max-w-6xl {
+                padding-left: 1rem;
+                padding-right: 1rem;
             }
 
             .profile-grid {
@@ -269,10 +390,6 @@
         }
 
         @media (min-width: 768px) {
-            .mobile-menu-btn {
-                display: none;
-            }
-
             .profile-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -283,71 +400,88 @@
                 grid-template-columns: repeat(3, 1fr);
             }
         }
-
-        .mobile-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: white;
-            border: 1px solid var(--color-beige-200);
-            border-top: none;
-            padding: 1rem;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-
-        .mobile-menu.show {
-            display: block;
-        }
     </style>
 </head>
 <body>
     <!-- Navigation -->
     <nav class="navbar">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-4">
+        <div class="max-w-6xl mx-auto px-6 py-4">
             <div class="flex justify-between items-center">
-                <a href="../index.html" class="nav-brand">📚 Diagana School</a>
+                <div class="flex items-center space-x-3">
+                    <div class="hamburger" onclick="toggleMobileMenu()">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <a href="dashboard.html" class="nav-brand">📚 Diagana School</a>
+                </div>
                 
-                <div class="mobile-nav-hidden flex space-x-1">
+                <!-- Desktop Navigation -->
+                <div class="flex space-x-1">
                     <a href="dashboard.html" class="nav-link">🏠 Accueil</a>
                     <a href="resources.html" class="nav-link">📁 Ressources</a>
                     <a href="collections.html" class="nav-link">📚 Collections</a>
                     <a href="#" class="nav-link active">👥 Profils</a>
                 </div>
                 
-                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
-                    ☰
-                </button>
-                
-                <div class="mobile-nav-hidden flex items-center space-x-3">
-                    <div class="profile-avatar" style="width: 2.5rem; height: 2.5rem; font-size: 1rem;">JD</div>
-                    <div class="text-sm">
+                <!-- User Info -->
+                <div class="flex items-center space-x-3">
+                    <div class="user-avatar" style="width: 2.5rem; height: 2.5rem;">JD</div>
+                    <div class="text-sm hidden md:block">
                         <div style="color: var(--color-gray-900); font-weight: 500;">Jean Dupont</div>
                         <div style="color: var(--color-gray-500);">Professeur</div>
                     </div>
                 </div>
             </div>
+        </div>
+    </nav>
 
-            <!-- Mobile menu -->
-            <div id="mobile-menu" class="mobile-menu">
-                <div class="space-y-2">
-                    <a href="dashboard.html" class="nav-link block">🏠 Accueil</a>
-                    <a href="resources.html" class="nav-link block">📁 Ressources</a>
-                    <a href="collections.html" class="nav-link block">📚 Collections</a>
-                    <a href="#" class="nav-link active block">👥 Profils</a>
-                </div>
-                <div class="mt-4 pt-4 border-t border-beige-200">
-                    <div class="flex items-center space-x-3">
-                        <div class="profile-avatar" style="width: 2.5rem; height: 2.5rem; font-size: 1rem;">JD</div>
-                        <div class="text-sm">
-                            <div style="color: var(--color-gray-900); font-weight: 500;">Jean Dupont</div>
-                            <div style="color: var(--color-gray-500);">Professeur</div>
-                        </div>
-                    </div>
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu" id="mobileMenu" onclick="closeMobileMenu(event)">
+        <div class="mobile-menu-content" onclick="event.stopPropagation()">
+            <div class="flex items-center space-x-3 mb-8">
+                <div class="user-avatar">JD</div>
+                <div>
+                    <div style="color: var(--color-gray-900); font-weight: 600;">Jean Dupont</div>
+                    <div style="color: var(--color-gray-500); font-size: 0.875rem;">Professeur</div>
                 </div>
             </div>
+            
+            <div class="space-y-2">
+                <a href="dashboard.html" class="mobile-nav-link">
+                    <span class="text-lg mr-3">🏠</span> Accueil
+                </a>
+                <a href="resources.html" class="mobile-nav-link">
+                    <span class="text-lg mr-3">📁</span> Ressources
+                </a>
+                <a href="collections.html" class="mobile-nav-link">
+                    <span class="text-lg mr-3">📚</span> Collections
+                </a>
+                <a href="#" class="mobile-nav-link active">
+                    <span class="text-lg mr-3">👥</span> Profils
+                </a>
+            </div>
         </div>
+    </div>
+
+    <!-- Bottom Navigation Mobile -->
+    <nav class="bottom-nav">
+        <a href="dashboard.html" class="bottom-nav-item">
+            <div class="bottom-nav-icon">🏠</div>
+            <div class="bottom-nav-label">Accueil</div>
+        </a>
+        <a href="resources.html" class="bottom-nav-item">
+            <div class="bottom-nav-icon">📁</div>
+            <div class="bottom-nav-label">Ressources</div>
+        </a>
+        <a href="collections.html" class="bottom-nav-item">
+            <div class="bottom-nav-icon">📚</div>
+            <div class="bottom-nav-label">Collections</div>
+        </a>
+        <a href="#" class="bottom-nav-item active">
+            <div class="bottom-nav-icon">👥</div>
+            <div class="bottom-nav-label">Profils</div>
+        </a>
     </nav>
 
     <!-- Contenu principal -->
@@ -696,9 +830,19 @@
     <script>
         let currentFilter = 'all';
 
+        // Fonctions menu mobile
         function toggleMobileMenu() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('show');
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+        }
+
+        function closeMobileMenu(event) {
+            if (event.target === event.currentTarget) {
+                const mobileMenu = document.getElementById('mobileMenu');
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            }
         }
 
         function filterByRole(role) {
@@ -778,13 +922,14 @@
             }, 100);
         });
 
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', function(event) {
-            const menu = document.getElementById('mobile-menu');
-            const menuBtn = document.querySelector('.mobile-menu-btn');
-            
-            if (!menu.contains(event.target) && !menuBtn.contains(event.target)) {
-                menu.classList.remove('show');
+        // Fermer le menu mobile avec la touche Escape
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const mobileMenu = document.getElementById('mobileMenu');
+                if (mobileMenu.classList.contains('active')) {
+                    mobileMenu.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
             }
         });
     </script>
