@@ -146,6 +146,19 @@
             color: var(--color-accent-tertiary);
         }
 
+        .user-avatar {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            background: var(--color-beige-300);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--color-gray-700);
+            font-size: 0.75rem;
+        }
+
         .search-bar {
             background: white;
             border: 1px solid var(--color-beige-200);
@@ -201,6 +214,49 @@
             box-shadow: 0 4px 8px rgba(217, 119, 6, 0.25);
         }
 
+        .btn-secondary {
+            background: var(--color-beige-200);
+            color: var(--color-gray-800);
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--color-beige-300);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            background: var(--color-beige-300);
+            border-color: var(--color-beige-400);
+        }
+
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: 1px solid var(--color-beige-300);
+            border-radius: 8px;
+            font-weight: 500;
+            color: var(--color-gray-700);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-right: 0.5rem;
+        }
+
+        .tab-button:hover,
+        .tab-button.active {
+            background: var(--color-accent-primary);
+            color: white;
+            border-color: var(--color-accent-primary);
+        }
+
+        .tab-content {
+            display: block;
+        }
+
         .animate-fade-in {
             animation: fadeIn 0.5s ease-out;
         }
@@ -208,6 +264,108 @@
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Navigation mobile */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 100;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu-content {
+            background: var(--color-beige-50);
+            width: 280px;
+            height: 100%;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            padding: 2rem 1.5rem;
+        }
+
+        .mobile-menu.active .mobile-menu-content {
+            transform: translateX(0);
+        }
+
+        .mobile-nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            color: var(--color-gray-700);
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-nav-link:hover, .mobile-nav-link.active {
+            background: var(--color-beige-200);
+            color: var(--color-accent-primary);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--color-gray-700);
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        /* Bottom navigation mobile */
+        .bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 1rem;
+            left: 1rem;
+            right: 1rem;
+            background: rgba(254, 253, 251, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--color-beige-200);
+            border-radius: 20px;
+            padding: 0.75rem 0;
+            z-index: 50;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .bottom-nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--color-gray-500);
+            padding: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .bottom-nav-item.active {
+            color: var(--color-accent-primary);
+        }
+
+        .bottom-nav-icon {
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .bottom-nav-label {
+            font-size: 0.75rem;
+            font-weight: 500;
         }
 
         .fab {
@@ -234,19 +392,58 @@
             box-shadow: 0 6px 20px rgba(217, 119, 6, 0.4);
         }
 
-        /* Mobile optimizations */
+        /* Cache le profil mobile sur desktop */
+        .mobile-profile-header {
+            display: none;
+        }
+
+        /* Responsive styles */
         @media (max-width: 768px) {
-            .mobile-nav-hidden {
+            /* Cache complètement la navbar principale sur mobile */
+            .navbar {
                 display: none;
             }
 
-            .mobile-menu-btn {
-                display: block;
-                background: none;
-                border: none;
-                font-size: 1.5rem;
-                cursor: pointer;
-                color: var(--color-gray-700);
+            /* Affiche uniquement la bottom navigation */
+            .bottom-nav {
+                display: flex;
+            }
+
+            /* Ajoute un conteneur fixe pour l'avatar de profil */
+            .mobile-profile-header {
+                display: block !important;
+                position: fixed;
+                top: 0;
+                right: 0;
+                z-index: 60;
+                padding: 1rem;
+                background: rgba(254, 253, 251, 0.95);
+                backdrop-filter: blur(10px);
+                border-bottom-left-radius: 12px;
+            }
+
+            /* Style pour l'avatar mobile */
+            .mobile-profile-header .user-avatar {
+                width: 2.5rem;
+                height: 2.5rem;
+                font-size: 1rem;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            /* Ajuste le contenu principal */
+            main {
+                padding-bottom: 7rem;
+                padding-top: 1rem;
+            }
+
+            .max-w-6xl {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+
+            /* Cache le menu mobile overlay (plus nécessaire) */
+            .mobile-menu {
+                display: none !important;
             }
 
             .profile-grid {
@@ -269,10 +466,6 @@
         }
 
         @media (min-width: 768px) {
-            .mobile-menu-btn {
-                display: none;
-            }
-
             .profile-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -283,85 +476,197 @@
                 grid-template-columns: repeat(3, 1fr);
             }
         }
-
-        .mobile-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: white;
-            border: 1px solid var(--color-beige-200);
-            border-top: none;
-            padding: 1rem;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-
-        .mobile-menu.show {
-            display: block;
-        }
     </style>
 </head>
 <body>
     <!-- Navigation -->
     <nav class="navbar">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-4">
+        <div class="max-w-6xl mx-auto px-6 py-4">
             <div class="flex justify-between items-center">
-                <a href="../index.html" class="nav-brand">📚 Diagana School</a>
+                <div class="flex items-center space-x-3">
+                    <div class="hamburger" onclick="toggleMobileMenu()">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <a href="dashboard.html" class="nav-brand">📚 Diagana School</a>
+                </div>
                 
-                <div class="mobile-nav-hidden flex space-x-1">
+                <!-- Desktop Navigation -->
+                <div class="flex space-x-1">
                     <a href="dashboard.html" class="nav-link">🏠 Accueil</a>
                     <a href="resources.html" class="nav-link">📁 Ressources</a>
                     <a href="collections.html" class="nav-link">📚 Collections</a>
                     <a href="#" class="nav-link active">👥 Profils</a>
                 </div>
                 
-                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
-                    ☰
-                </button>
-                
-                <div class="mobile-nav-hidden flex items-center space-x-3">
-                    <div class="profile-avatar" style="width: 2.5rem; height: 2.5rem; font-size: 1rem;">JD</div>
-                    <div class="text-sm">
+                <!-- User Info -->
+                <div class="flex items-center space-x-3">
+                    <div class="user-avatar" style="width: 2.5rem; height: 2.5rem;">JD</div>
+                    <div class="text-sm hidden md:block">
                         <div style="color: var(--color-gray-900); font-weight: 500;">Jean Dupont</div>
                         <div style="color: var(--color-gray-500);">Professeur</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Mobile menu -->
-            <div id="mobile-menu" class="mobile-menu">
-                <div class="space-y-2">
-                    <a href="dashboard.html" class="nav-link block">🏠 Accueil</a>
-                    <a href="resources.html" class="nav-link block">📁 Ressources</a>
-                    <a href="collections.html" class="nav-link block">📚 Collections</a>
-                    <a href="#" class="nav-link active block">👥 Profils</a>
-                </div>
-                <div class="mt-4 pt-4 border-t border-beige-200">
-                    <div class="flex items-center space-x-3">
-                        <div class="profile-avatar" style="width: 2.5rem; height: 2.5rem; font-size: 1rem;">JD</div>
-                        <div class="text-sm">
-                            <div style="color: var(--color-gray-900); font-weight: 500;">Jean Dupont</div>
-                            <div style="color: var(--color-gray-500);">Professeur</div>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </nav>
 
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu" id="mobileMenu" onclick="closeMobileMenu(event)">
+        <div class="mobile-menu-content" onclick="event.stopPropagation()">
+            <div class="flex items-center space-x-3 mb-8">
+                <div class="user-avatar">JD</div>
+                <div>
+                    <div style="color: var(--color-gray-900); font-weight: 600;">Jean Dupont</div>
+                    <div style="color: var(--color-gray-500); font-size: 0.875rem;">Professeur</div>
+                </div>
+            </div>
+            
+            <div class="space-y-2">
+                <a href="dashboard.html" class="mobile-nav-link">
+                    <span class="text-lg mr-3">🏠</span> Accueil
+                </a>
+                <a href="resources.html" class="mobile-nav-link">
+                    <span class="text-lg mr-3">📁</span> Ressources
+                </a>
+                <a href="collections.html" class="mobile-nav-link">
+                    <span class="text-lg mr-3">📚</span> Collections
+                </a>
+                <a href="#" class="mobile-nav-link active">
+                    <span class="text-lg mr-3">👥</span> Profils
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Profile Header -->
+    <div class="mobile-profile-header">
+        <div class="user-avatar">JD</div>
+    </div>
+
+    <!-- Bottom Navigation Mobile -->
+    <nav class="bottom-nav">
+        <a href="dashboard.html" class="bottom-nav-item">
+            <div class="bottom-nav-icon">🏠</div>
+            <div class="bottom-nav-label">Accueil</div>
+        </a>
+        <a href="resources.html" class="bottom-nav-item">
+            <div class="bottom-nav-icon">📁</div>
+            <div class="bottom-nav-label">Ressources</div>
+        </a>
+        <a href="collections.html" class="bottom-nav-item">
+            <div class="bottom-nav-icon">📚</div>
+            <div class="bottom-nav-label">Collections</div>
+        </a>
+        <a href="#" class="bottom-nav-item active">
+            <div class="bottom-nav-icon">👥</div>
+            <div class="bottom-nav-label">Profils</div>
+        </a>
+    </nav>
+
     <!-- Contenu principal -->
     <main class="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
         
-        <!-- Header -->
+        <!-- Header avec onglets -->
         <div class="mb-6 sm:mb-8 animate-fade-in">
-            <h1 class="text-2xl sm:text-3xl font-bold mb-2" style="color: var(--color-gray-900);">
-                👥 Profils de la communauté
+            <h1 class="text-2xl sm:text-3xl font-bold mb-4" style="color: var(--color-gray-900);">
+                👤 Profil
             </h1>
-            <p style="color: var(--color-gray-500); font-size: 1rem sm:font-size: 1.1rem;">
-                Découvrez et connectez-vous avec les membres de votre établissement
-            </p>
+            
+            <!-- Onglets de navigation -->
+            <div class="flex space-x-2 mb-4">
+                <button class="tab-button active" onclick="showTab('me')" id="tab-me">
+                    👤 Moi
+                </button>
+                <button class="tab-button" onclick="showTab('community')" id="tab-community">
+                    👥 Communauté
+                </button>
+            </div>
         </div>
+
+        <!-- Section Moi -->
+        <div id="tab-content-me" class="tab-content">
+            <div class="mb-6 sm:mb-8">
+                <p style="color: var(--color-gray-500); font-size: 1rem;">
+                    Voici votre profil personnel
+                </p>
+            </div>
+            
+            <!-- Profil Personnel -->
+            <div class="bg-white rounded-xl border border-beige-200 p-6 mb-6">
+                <div class="flex items-center space-x-4 mb-6">
+                    <div class="profile-avatar teacher" style="width: 5rem; height: 5rem; font-size: 2rem;">
+                        JD
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold mb-1" style="color: var(--color-gray-900);">Jean Dupont</h2>
+                        <p class="text-lg mb-2" style="color: var(--color-gray-600);">Professeur de Mathématiques</p>
+                        <span class="badge teacher">👩‍🏫 Professeur</span>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold mb-1" style="color: var(--color-accent-primary);">15</div>
+                        <div class="text-sm" style="color: var(--color-gray-500);">Collections</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold mb-1" style="color: var(--color-accent-secondary);">89</div>
+                        <div class="text-sm" style="color: var(--color-gray-500);">Ressources</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold mb-1" style="color: var(--color-accent-info);">156</div>
+                        <div class="text-sm" style="color: var(--color-gray-500);">Étudiants</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold mb-1" style="color: var(--color-accent-tertiary);">4.8</div>
+                        <div class="text-sm" style="color: var(--color-gray-500);">Note moyenne</div>
+                    </div>
+                </div>
+                
+                <div class="flex space-x-3">
+                    <button class="btn-primary">✏️ Modifier le profil</button>
+                    <button class="btn-secondary">⚙️ Paramètres</button>
+                </div>
+            </div>
+            
+            <!-- Mes dernières activités -->
+            <div class="bg-white rounded-xl border border-beige-200 p-6">
+                <h3 class="text-lg font-semibold mb-4" style="color: var(--color-gray-900);">📈 Mes dernières activités</h3>
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-2 h-2 rounded-full" style="background: var(--color-accent-primary);"></div>
+                        <div class="text-sm">
+                            <span style="color: var(--color-gray-700);">Vous avez créé</span>
+                            <span style="color: var(--color-gray-500);">"Cours d'algèbre - Niveau 3ème" il y a 2 heures</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-2 h-2 rounded-full" style="background: var(--color-accent-secondary);"></div>
+                        <div class="text-sm">
+                            <span style="color: var(--color-gray-700);">Vous avez modifié</span>
+                            <span style="color: var(--color-gray-500);">votre collection "Mathématiques 3ème" hier</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-2 h-2 rounded-full" style="background: var(--color-accent-info);"></div>
+                        <div class="text-sm">
+                            <span style="color: var(--color-gray-700);">Marie Dubois</span>
+                            <span style="color: var(--color-gray-500);">a aimé votre ressource il y a 3 heures</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Communauté -->
+        <div id="tab-content-community" class="tab-content" style="display: none;">
+            <div class="mb-6 sm:mb-8">
+                <p style="color: var(--color-gray-500); font-size: 1rem;">
+                    Découvrez et connectez-vous avec les membres de votre établissement
+                </p>
+            </div>
 
         <!-- Recherche et filtres -->
         <div class="search-filters mb-6 sm:mb-8 animate-fade-in">
@@ -686,6 +991,7 @@
                 Essayez de modifier vos critères de recherche
             </p>
         </div>
+        </div>
     </main>
 
     <!-- Bouton flottant pour inviter -->
@@ -696,9 +1002,19 @@
     <script>
         let currentFilter = 'all';
 
+        // Fonctions menu mobile
         function toggleMobileMenu() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('show');
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+        }
+
+        function closeMobileMenu(event) {
+            if (event.target === event.currentTarget) {
+                const mobileMenu = document.getElementById('mobileMenu');
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            }
         }
 
         function filterByRole(role) {
@@ -778,13 +1094,33 @@
             }, 100);
         });
 
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', function(event) {
-            const menu = document.getElementById('mobile-menu');
-            const menuBtn = document.querySelector('.mobile-menu-btn');
+        // Fonction pour gérer les onglets
+        function showTab(tabName) {
+            // Cacher tous les contenus d'onglets
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.style.display = 'none';
+            });
             
-            if (!menu.contains(event.target) && !menuBtn.contains(event.target)) {
-                menu.classList.remove('show');
+            // Enlever la classe active de tous les boutons d'onglets
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Afficher le contenu de l'onglet sélectionné
+            document.getElementById('tab-content-' + tabName).style.display = 'block';
+            
+            // Activer le bouton de l'onglet sélectionné
+            document.getElementById('tab-' + tabName).classList.add('active');
+        }
+
+        // Fermer le menu mobile avec la touche Escape
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const mobileMenu = document.getElementById('mobileMenu');
+                if (mobileMenu.classList.contains('active')) {
+                    mobileMenu.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
             }
         });
     </script>
