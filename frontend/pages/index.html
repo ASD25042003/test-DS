@@ -1,16 +1,868 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diagana School</title>
-    <!-- Tailwind CSS CDN -->
-    <!-- Custom CSS -->
-    <!-- Meta tags et favicons -->
+    <title>Diagana School - Plateforme éducative Moderne</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-beige-50: #fefdfb;
+            --color-beige-100: #f7f5f0;
+            --color-beige-200: #f0ebe0;
+            --color-beige-300: #e8ddd0;
+            --color-beige-400: #d4c4a8;
+            --color-accent-primary: #d97706;
+            --color-accent-secondary: #059669;
+            --color-accent-info: #0ea5e9;
+            --color-accent-tertiary: #7c3aed;
+            --color-gray-900: #1a1a1a;
+            --color-gray-800: #2d2d2d;
+            --color-gray-700: #404040;
+            --color-gray-500: #737373;
+            --color-gray-400: #a3a3a3;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            background: var(--color-beige-50);
+            color: var(--color-gray-700);
+        }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, 
+                var(--color-beige-50) 0%, 
+                rgba(217, 119, 6, 0.05) 25%,
+                rgba(5, 150, 105, 0.05) 50%,
+                rgba(14, 165, 233, 0.05) 75%,
+                var(--color-beige-100) 100%);
+        }
+
+        .feature-card {
+            background: white;
+            border: 1px solid var(--color-beige-200);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px -8px rgba(217, 119, 6, 0.1);
+            border-color: var(--color-accent-primary);
+        }
+
+        .btn-primary {
+            background: var(--color-accent-primary);
+            color: white;
+            font-weight: 600;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .btn-primary:hover {
+            background: #b45309;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(217, 119, 6, 0.25);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--color-accent-primary);
+            font-weight: 600;
+            padding: 1rem 2rem;
+            border: 2px solid var(--color-accent-primary);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .btn-secondary:hover {
+            background: var(--color-accent-primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .navbar {
+            background: rgba(254, 253, 251, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--color-beige-200);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .nav-brand {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--color-gray-900);
+            text-decoration: none;
+        }
+
+        .nav-link {
+            color: var(--color-gray-600);
+            font-weight: 500;
+            text-decoration: none;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--color-gray-900);
+            background: var(--color-beige-100);
+        }
+
+        .floating-icon {
+            width: 4rem;
+            height: 4rem;
+            background: white;
+            border: 1px solid var(--color-beige-200);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin: 0 auto 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .floating-icon.orange { border-color: var(--color-accent-primary); color: var(--color-accent-primary); }
+        .floating-icon.green { border-color: var(--color-accent-secondary); color: var(--color-accent-secondary); }
+        .floating-icon.blue { border-color: var(--color-accent-info); color: var(--color-accent-info); }
+        .floating-icon.purple { border-color: var(--color-accent-tertiary); color: var(--color-accent-tertiary); }
+
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-accent-primary);
+            line-height: 1;
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .animate-slide-up {
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Navigation mobile */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 100;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu-content {
+            background: var(--color-beige-50);
+            width: 280px;
+            height: 100%;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            padding: 2rem 1.5rem;
+        }
+
+        .mobile-menu.active .mobile-menu-content {
+            transform: translateX(0);
+        }
+
+        .mobile-nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            color: var(--color-gray-700);
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-nav-link:hover, .mobile-nav-link.active {
+            background: var(--color-beige-200);
+            color: var(--color-accent-primary);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--color-gray-700);
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .navbar .nav-links {
+                display: none !important;
+            }
+            
+            .hamburger {
+                display: flex;
+            }
+
+            .navbar {
+                padding: 0;
+            }
+
+            .navbar .max-w-6xl {
+                padding: 0.5rem 0.75rem;
+            }
+
+            .navbar .flex.justify-between {
+                align-items: center;
+            }
+
+            .nav-brand {
+                font-size: 1rem;
+                margin-left: 0.25rem;
+            }
+
+            .hamburger {
+                order: -1;
+                margin-right: 0.25rem;
+            }
+
+            .hamburger span {
+                width: 20px;
+                height: 2px;
+                margin: 2px 0;
+            }
+
+            .navbar .flex.items-center.space-x-3 {
+                gap: 0.25rem;
+            }
+
+            .hero-content {
+                text-align: center;
+                padding: 1.5rem 0.75rem;
+            }
+
+            .hero-title {
+                font-size: 1.875rem;
+                line-height: 1.1;
+                margin-bottom: 1rem;
+            }
+
+            .hero-subtitle {
+                font-size: 0.95rem;
+                line-height: 1.4;
+                margin: 0.75rem 0 1.5rem 0;
+            }
+
+            .feature-card {
+                padding: 1.25rem;
+                margin-bottom: 0.75rem;
+                border-radius: 12px;
+            }
+
+            .feature-card h3 {
+                font-size: 1.125rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .feature-card p {
+                font-size: 0.875rem;
+                line-height: 1.4;
+                margin-bottom: 0.75rem;
+            }
+
+            .feature-card ul li {
+                font-size: 0.8125rem;
+            }
+
+            .floating-icon {
+                width: 3rem;
+                height: 3rem;
+                font-size: 1.25rem;
+                margin-bottom: 0.75rem;
+            }
+
+            .btn-primary, .btn-secondary {
+                padding: 0.75rem 1.5rem;
+                font-size: 0.95rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+            }
+
+            .stats-number {
+                font-size: 2rem;
+            }
+
+            .max-w-6xl {
+                padding-left: 0.75rem;
+                padding-right: 0.75rem;
+            }
+
+            section {
+                padding-top: 2rem;
+                padding-bottom: 2rem;
+            }
+
+            .py-12 {
+                padding-top: 2rem;
+                padding-bottom: 2rem;
+            }
+
+            .py-20 {
+                padding-top: 3rem;
+                padding-bottom: 3rem;
+            }
+
+            .text-3xl {
+                font-size: 1.5rem;
+            }
+
+            .text-4xl {
+                font-size: 1.75rem;
+            }
+
+            .text-lg {
+                font-size: 0.95rem;
+            }
+
+            .text-xl {
+                font-size: 1.05rem;
+            }
+
+            .mobile-menu-content {
+                width: 260px;
+                padding: 1.5rem 1rem;
+            }
+
+            .mobile-nav-link {
+                padding: 0.625rem;
+                font-size: 0.9rem;
+            }
+
+            .grid.gap-6 {
+                gap: 1rem;
+            }
+
+            .grid.gap-8 {
+                gap: 1.25rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .max-w-6xl {
+                padding-left: 0.5rem;
+                padding-right: 0.5rem;
+            }
+
+            .hero-title {
+                font-size: 1.625rem;
+                line-height: 1.1;
+            }
+
+            .hero-subtitle {
+                font-size: 0.875rem;
+            }
+
+            .btn-primary, .btn-secondary {
+                padding: 0.625rem 1.25rem;
+                font-size: 0.875rem;
+            }
+
+            .feature-card {
+                padding: 1rem;
+            }
+
+            .stats-grid {
+                gap: 0.5rem;
+            }
+
+            .stats-number {
+                font-size: 1.75rem;
+            }
+
+            .floating-icon {
+                width: 2.5rem;
+                height: 2.5rem;
+                font-size: 1.125rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Container principal SPA -->
-    
-    <!-- Scripts JS -->
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="max-w-6xl mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <div class="hamburger" onclick="toggleMobileMenu()">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <a href="#" class="nav-brand">📚 Diagana School</a>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <div class="nav-links flex space-x-1">
+                    <a href="#features" class="nav-link">🚀 Fonctionnalités</a>
+                    <a href="#about" class="nav-link">ℹ️ À propos</a>
+                    <a href="#stats" class="nav-link">📊 Statistiques</a>
+                    <a href="/auth" class="nav-link">🚀 Commencer</a>
+                </div>
+                
+                <!-- Placeholder for consistency -->
+                <div class="w-8 h-8"></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu" id="mobileMenu" onclick="closeMobileMenu(event)">
+        <div class="mobile-menu-content" onclick="event.stopPropagation()">
+            <div class="flex items-center space-x-3 mb-8">
+                <div class="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center text-lg font-semibold text-gray-600">
+                    👤
+                </div>
+                <div>
+                    <div style="color: var(--color-gray-900); font-weight: 600;">Visiteur</div>
+                    <div style="color: var(--color-gray-500); font-size: 0.875rem;">Non connecté</div>
+                </div>
+            </div>
+            
+            <div class="space-y-2">
+                <a href="#features" class="mobile-nav-link" onclick="closeMobileMenu(event)">
+                    <span class="text-lg mr-3">🚀</span> Fonctionnalités
+                </a>
+                <a href="#about" class="mobile-nav-link" onclick="closeMobileMenu(event)">
+                    <span class="text-lg mr-3">ℹ️</span> À propos
+                </a>
+                <a href="#stats" class="mobile-nav-link" onclick="closeMobileMenu(event)">
+                    <span class="text-lg mr-3">📊</span> Statistiques
+                </a>
+                <a href="/auth" class="mobile-nav-link">
+                    <span class="text-lg mr-3">🚀</span> Commencer
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient py-12 sm:py-20">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="hero-content animate-fade-in">
+                <h1 class="hero-title text-3xl sm:text-5xl font-bold mb-4 sm:mb-6" style="color: var(--color-gray-900);">
+                    Votre plateforme éducative avec 
+                    <span style="color: var(--color-accent-primary);">Diagana School</span>
+                </h1>
+                <p class="hero-subtitle text-lg sm:text-xl mb-8 sm:mb-10 max-w-3xl mx-auto" style="color: var(--color-gray-600);">
+                    Plateforme éducative moderne pour la gestion et le partage de ressources pédagogiques.
+                    Créez, organisez et collaborez facilement avec vos étudiants et collègues.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <a href="/auth" class="btn-primary">
+                        🚀 Commencer maintenant
+                    </a>
+                    <a href="#features" class="btn-secondary">
+                        👁 Découvrir les fonctionnalités
+                    </a>
+                </div>
+            </div>
+
+            <!-- Hero Visual -->
+            <div class="mt-12 sm:mt-16 animate-slide-up">
+                <div class="bg-white rounded-3xl shadow-2xl border border-beige-200 overflow-hidden max-w-4xl mx-auto">
+                    <div class="bg-gray-100 px-6 py-4 border-b border-beige-200">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 bg-red-400 rounded-full"></div>
+                            <div class="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                            <div class="w-3 h-3 bg-green-400 rounded-full"></div>
+                            <div class="ml-4 text-sm text-gray-500">diagana-school.edu/dashboard</div>
+                        </div>
+                    </div>
+                    <div class="p-6 sm:p-8">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+                            <div class="text-center">
+                                <div class="floating-icon orange">📚</div>
+                                <h4 class="font-semibold mb-2">Collections</h4>
+                                <p class="text-sm text-gray-500">Collections organisées</p>
+                            </div>
+                            <div class="text-center">
+                                <div class="floating-icon green">📖</div>
+                                <h4 class="font-semibold mb-2">Ressources</h4>
+                                <p class="text-sm text-gray-500">Ressources pédagogiques</p>
+                            </div>
+                            <div class="text-center">
+                                <div class="floating-icon blue">👥</div>
+                                <h4 class="font-semibold mb-2">Utilisateurs</h4>
+                                <p class="text-sm text-gray-500">Communauté active</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-12 sm:py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="text-center mb-12 sm:mb-16">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4" style="color: var(--color-gray-900);">
+                    🚀 Fonctionnalités puissantes
+                </h2>
+                <p class="text-lg sm:text-xl max-w-3xl mx-auto" style="color: var(--color-gray-600);">
+                    Découvrez tous les outils dont vous avez besoin pour créer une expérience éducative exceptionnelle
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                <!-- Feature 1 -->
+                <div class="feature-card animate-fade-in">
+                    <div class="floating-icon orange">📚</div>
+                    <h3 class="text-xl font-semibold mb-3" style="color: var(--color-gray-900);">
+                        Collections intelligentes
+                    </h3>
+                    <p class="text-gray-600 mb-4">
+                        Organisez vos cours et ressources en collections thématiques avec un système de progression visuel.
+                    </p>
+                    <ul class="text-sm text-gray-500 space-y-2">
+                        <li>✓ Organisation par matières</li>
+                        <li>✓ Suivi de progression</li>
+                        <li>✓ Partage collaboratif</li>
+                    </ul>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="feature-card animate-fade-in">
+                    <div class="floating-icon green">📖</div>
+                    <h3 class="text-xl font-semibold mb-3" style="color: var(--color-gray-900);">
+                        Gestion de ressources
+                    </h3>
+                    <p class="text-gray-600 mb-4">
+                        Stockez, classez et partagez tous types de contenus éducatifs en toute simplicité.
+                    </p>
+                    <ul class="text-sm text-gray-500 space-y-2">
+                        <li>✓ Tous formats supportés</li>
+                        <li>✓ Recherche avancée</li>
+                        <li>✓ Tags et métadonnées</li>
+                    </ul>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="feature-card animate-fade-in">
+                    <div class="floating-icon blue">👥</div>
+                    <h3 class="text-xl font-semibold mb-3" style="color: var(--color-gray-900);">
+                        Collaboration sociale
+                    </h3>
+                    <p class="text-gray-600 mb-4">
+                        Travaillez ensemble avec vos étudiants et collègues sur des projets partagés.
+                    </p>
+                    <ul class="text-sm text-gray-500 space-y-2">
+                        <li>✓ Système de suivi</li>
+                        <li>✓ Commentaires et likes</li>
+                        <li>✓ Notifications en temps réel</li>
+                    </ul>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="feature-card animate-fade-in">
+                    <div class="floating-icon purple">📊</div>
+                    <h3 class="text-xl font-semibold mb-3" style="color: var(--color-gray-900);">
+                        Analytiques avancées
+                    </h3>
+                    <p class="text-gray-600 mb-4">
+                        Suivez les performances et l'engagement avec des tableaux de bord détaillés.
+                    </p>
+                    <ul class="text-sm text-gray-500 space-y-2">
+                        <li>✓ Métriques d'engagement</li>
+                        <li>✓ Statistiques d'usage</li>
+                        <li>✓ Rapports détaillés</li>
+                    </ul>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="feature-card animate-fade-in">
+                    <div class="floating-icon orange">🔒</div>
+                    <h3 class="text-xl font-semibold mb-3" style="color: var(--color-gray-900);">
+                        Sécurité renforcée
+                    </h3>
+                    <p class="text-gray-600 mb-4">
+                        Système sécurisé avec authentification JWT, permissions granulaires et validation stricte.
+                    </p>
+                    <ul class="text-sm text-gray-500 space-y-2">
+                        <li>✓ Authentification JWT</li>
+                        <li>✓ Permissions par rôle</li>
+                        <li>✓ Données chiffrées</li>
+                    </ul>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="feature-card animate-fade-in">
+                    <div class="floating-icon green">📱</div>
+                    <h3 class="text-xl font-semibold mb-3" style="color: var(--color-gray-900);">
+                        Mobile-first
+                    </h3>
+                    <p class="text-gray-600 mb-4">
+                        Interface optimisée pour tous les appareils, accessible partout, tout le temps.
+                    </p>
+                    <ul class="text-sm text-gray-500 space-y-2">
+                        <li>✓ Design responsive</li>
+                        <li>✓ Navigation intuitive</li>
+                        <li>✓ Performance optimisée</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section id="stats" class="py-12 sm:py-20" style="background: var(--color-beige-50);">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="text-center mb-12 sm:mb-16">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4" style="color: var(--color-gray-900);">
+                    🚀 Backend opérationnel à 99%
+                </h2>
+                <p class="text-lg sm:text-xl max-w-3xl mx-auto" style="color: var(--color-gray-600);">
+                    Une infrastructure technique validée et prête pour la production
+                </p>
+            </div>
+
+            <div class="stats-grid grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+                <div class="text-center bg-white p-6 sm:p-8 rounded-2xl shadow-lg border border-beige-200">
+                    <div class="stats-number">59</div>
+                    <div class="text-sm sm:text-base font-medium mt-2" style="color: var(--color-gray-700);">Endpoints API</div>
+                    <div class="text-xs sm:text-sm" style="color: var(--color-gray-500);">documentés</div>
+                </div>
+
+                <div class="text-center bg-white p-6 sm:p-8 rounded-2xl shadow-lg border border-beige-200">
+                    <div class="stats-number" style="color: var(--color-accent-secondary);">83/84</div>
+                    <div class="text-sm sm:text-base font-medium mt-2" style="color: var(--color-gray-700);">Tests</div>
+                    <div class="text-xs sm:text-sm" style="color: var(--color-gray-500);">validés (99%)</div>
+                </div>
+
+                <div class="text-center bg-white p-6 sm:p-8 rounded-2xl shadow-lg border border-beige-200">
+                    <div class="stats-number" style="color: var(--color-accent-info);">4</div>
+                    <div class="text-sm sm:text-base font-medium mt-2" style="color: var(--color-gray-700);">Modules</div>
+                    <div class="text-xs sm:text-sm" style="color: var(--color-gray-500);">opérationnels</div>
+                </div>
+
+                <div class="text-center bg-white p-6 sm:p-8 rounded-2xl shadow-lg border border-beige-200">
+                    <div class="stats-number" style="color: var(--color-accent-tertiary);">100%</div>
+                    <div class="text-sm sm:text-base font-medium mt-2" style="color: var(--color-gray-700);">Sécurisé</div>
+                    <div class="text-xs sm:text-sm" style="color: var(--color-gray-500);">JWT + RLS</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-12 sm:py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center">
+                <div class="animate-fade-in">
+                    <h2 class="text-3xl sm:text-4xl font-bold mb-6" style="color: var(--color-gray-900);">
+                        ℹ️ À propos de Diagana School
+                    </h2>
+                    <p class="text-lg mb-6" style="color: var(--color-gray-600);">
+                        Diagana School est une plateforme éducative moderne conçue pour centraliser, 
+                        partager et organiser les ressources pédagogiques. Notre système permet aux 
+                        professeurs et élèves d'interagir et de collaborer facilement.
+                    </p>
+                    <p class="text-lg mb-8" style="color: var(--color-gray-600);">
+                        Avec une architecture sécurisée et une interface intuitive, nous facilitons 
+                        l'accès aux ressources, l'organisation des contenus et le suivi pédagogique 
+                        dans un environnement collaboratif moderne.
+                    </p>
+                    <a href="/auth" class="btn-primary">
+                        🚀 Rejoignez-nous
+                    </a>
+                </div>
+
+                <div class="animate-slide-up">
+                    <div class="bg-gradient-to-br from-orange-50 to-orange-100 rounded-3xl p-8 sm:p-12">
+                        <div class="space-y-6">
+                            <div class="flex items-start space-x-4">
+                                <div class="floating-icon orange" style="margin: 0; width: 3rem; height: 3rem; flex-shrink: 0;">
+                                    🎯
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-lg mb-2">Mission</h4>
+                                    <p class="text-gray-600">Moderniser l'accès aux ressources éducatives</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-4">
+                                <div class="floating-icon orange" style="margin: 0; width: 3rem; height: 3rem; flex-shrink: 0;">
+                                    🎯
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-lg mb-2">Vision</h4>
+                                    <p class="text-gray-600">Une plateforme collaborative pour tous les établissements</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-4">
+                                <div class="floating-icon blue" style="margin: 0; width: 3rem; height: 3rem; flex-shrink: 0;">
+                                    💎
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-lg mb-2">Valeurs</h4>
+                                    <p class="text-gray-600">Innovation, sécurité et excellence pédagogique</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-12 sm:py-20 hero-gradient">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+            <h2 class="text-3xl sm:text-4xl font-bold mb-6" style="color: var(--color-gray-900);">
+                🚀 Prêt à transformer votre approche éducative ?
+            </h2>
+            <p class="text-lg sm:text-xl mb-8" style="color: var(--color-gray-600);">
+                Découvrez la puissance d'une plateforme éducative moderne et sécurisée
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <a href="/auth" class="btn-primary">
+                    🚀 Créer mon compte
+                </a>
+                <a href="#features" class="btn-secondary">
+                    👁 En savoir plus
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-beige-200 py-8 sm:py-12">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="text-center">
+                <div class="nav-brand mb-4">📚 Diagana School</div>
+                <p class="text-gray-600 mb-6">
+                    Plateforme éducative moderne et sécurisée
+                </p>
+                <div class="flex flex-wrap justify-center gap-6 text-sm text-gray-500">
+                    <a href="/auth" class="hover:text-orange-600 transition-colors">Se connecter</a>
+                    <a href="#features" class="hover:text-orange-600 transition-colors">Fonctionnalités</a>
+                    <a href="#about" class="hover:text-orange-600 transition-colors">À propos</a>
+                    <a href="#" class="hover:text-orange-600 transition-colors">Support</a>
+                </div>
+                <div class="mt-8 pt-8 border-t border-beige-200 text-sm text-gray-500">
+                    © 2025 Diagana School. Tous droits réservés.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Fonctions menu mobile
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+        }
+
+        function closeMobileMenu(event) {
+            if (event.target === event.currentTarget || event.target.classList.contains('mobile-nav-link')) {
+                const mobileMenu = document.getElementById('mobileMenu');
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Fermer le menu mobile avec la touche Escape
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const mobileMenu = document.getElementById('mobileMenu');
+                if (mobileMenu.classList.contains('active')) {
+                    mobileMenu.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            }
+        });
+
+        // Animation au scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-fade-in, .animate-slide-up').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out';
+            observer.observe(el);
+        });
+
+        // Smooth scroll pour les liens d'ancrage
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>

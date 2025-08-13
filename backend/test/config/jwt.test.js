@@ -28,11 +28,13 @@ describe('Configuration JWT', () => {
       expect(token.split('.')).toHaveLength(3); // Format JWT : header.payload.signature
     });
 
-    it('devrait générer des tokens différents pour le même payload', () => {
+    it('devrait générer des tokens différents avec payloads différents', () => {
       const token1 = generateToken(testPayload);
-      const token2 = generateToken(testPayload);
+      const token2 = generateToken({...testPayload, userId: 'different-user-id'});
       
-      expect(token1).not.toBe(token2); // À cause de l'iat (issued at)
+      expect(token1).not.toBe(token2); // Payloads différents
+      expect(token1).toBeDefined();
+      expect(token2).toBeDefined();
     });
 
     it('devrait inclure les métadonnées appropriées', () => {

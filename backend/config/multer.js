@@ -29,11 +29,22 @@ const fileFilter = (req, file, cb) => {
     'mov': 'video/quicktime'
   };
 
-  if (ALLOWED_TYPES.includes(fileExtension) && 
-      (mimeTypeMap[fileExtension] === file.mimetype || 
-       file.mimetype.startsWith('image/') || 
-       file.mimetype.startsWith('video/') ||
-       file.mimetype.startsWith('application/'))) {
+  // Vérifier d'abord si l'extension est autorisée
+  if (!ALLOWED_TYPES.includes(fileExtension)) {
+    logger.warn(`Type de fichier non autorisé: ${fileExtension} (${file.mimetype})`);
+    cb(new Error(`Type de fichier non autorisé: ${fileExtension}`), false);
+    return;
+  }
+
+  // Ensuite vérifier le MIME type pour les extensions autorisées
+  const expectedMimeType = mimeTypeMap[fileExtension];
+  if (expectedMimeType && expectedMimeType === file.mimetype) {
+    cb(null, true);
+  } else if (file.mimetype.startsWith('image/') && ['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension)) {
+    cb(null, true);
+  } else if (file.mimetype.startsWith('video/') && ['mp4', 'avi', 'mov'].includes(fileExtension)) {
+    cb(null, true);
+  } else if (file.mimetype.startsWith('application/') && ['pdf', 'docx'].includes(fileExtension)) {
     cb(null, true);
   } else {
     logger.warn(`Type de fichier non autorisé: ${fileExtension} (${file.mimetype})`);
@@ -63,6 +74,27 @@ const upload = multer({
 
 const uploadSingle = upload.single('file');
 const uploadMultiple = upload.array('files', 5);
+
+// Middleware pour ressources : champs texte + fichier optionnel
+const uploadResourceFields = upload.fields([
+  { name: 'file', maxCount: 1 }  // Fichier optionnel
+]);
+
+// Middleware personnalisé pour traiter les champs de ressource
+const uploadResourceMiddleware = (req, res, next) => {
+  uploadResourceFields(req, res, (error) => {
+    if (error) {
+      return next(error);
+    }
+    
+    // Réorganiser les fichiers pour compatibilité avec le code existant
+    if (req.files && req.files.file && req.files.file[0]) {
+      req.file = req.files.file[0];
+    }
+    
+    next();
+  });
+};
 
 const handleUploadError = (error, req, res, next) => {
   if (error instanceof multer.MulterError) {
@@ -95,6 +127,7 @@ const handleUploadError = (error, req, res, next) => {
 module.exports = {
   uploadSingle,
   uploadMultiple,
+  uploadResourceMiddleware,  // Nouveau middleware pour les ressources
   handleUploadError,
   generateFileName,
   ALLOWED_TYPES,

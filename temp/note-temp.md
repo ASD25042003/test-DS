@@ -1,74 +1,49 @@
 
-
-ons vas commencer a planifier le frontend 
-pour cela :
-
-# stack :
-html css js talwind via cdn   
-
-# architecture :
-
-elle doit etre une interface SPA modulaire 
+pour le contexte et comprendre le projet tu doit obligatoirement 
+lire et comprendre la documentation complete : voir  README.md et le 
+rpertoire docs .
 
 
-frontend/
-    api/
-        auth.js
-        et les autres modules....
-    components/
-        auth/
-            index.js  # export centraliser des sous composants specialiser 
-        resources/
-            index.js
-            resource-carte.js 
-            et autres...
-    js/                     # controllers js 
-        auth.js 
-        resources.js
-        home.js
-        index.js              
+probleme a resoudre :
 
-    pages/
-        auth.html
-        home.html
-        index.html
 
-    styles/
-        main.css  # css commun     
+la creattion de ressource de type media fonctionne mais l'image 
+na pas laire d'avoir ete uploader . elle nest ni visible dans 
+wasabi ni consultable dans linterface voir temp-image\{86DF0F2A-5274-4392-8AC2-7196FA529B74}.png   
+malgres le message de succes , a noter que les fichiers pdf , docx et txt fonctionne et son accecible apres upload .
+
+je veux que tu passe par une analyse et comprehension complete et profonde du module a tous les couches niveau backend frontend  avant dessayer de resoudre le probleme .
+note: je vais une vrai analyse pas juste survoler quelque fichiers 
 
 
 
-creer l'arborecence et les fichiers mais tu n'implemente rien laisse les fichiers vides 
 
 
 
- # ui ux :
 
- - que ca soit l'apparence l'experience utilisateur et l'experience utilisateur 
- cella doit suivre une ligne directrice bien precise . 
- dans le repertoire inspiration j'y ai mis des images venant du site d'antropic 
- c'est ce deseigne que je veux pour mon application .
- je trouve ce dernier epurer aeerer minimaliste artistique  et ce que j'aime par decus tout 
- c'est lutilisation des couleurs les differentes tont de beige les accentuation noir les couleurs de touches . et aussi la police d'ecriture les formes et cartes . 
-
- tu devra analyser les images et t'en inspirer en te basant sur cette analyse tu vas creer un fichier de reference ui ux en .md dans la docs . 
-
- tu doit etre le plus fidel et pertinent sur cette parti du travaille . 
+logs terminale :
 
 
+info: ::1 - - [12/Aug/2025:23:02:50 +0000] "GET /api/ressources?page=1&limit=50 HTTP/1.1" 304 - "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36" {"service":"diagana-school-backend","timestamp":"2025-08-12 23:02:50"}    
+Données reçues côté serveur: {
+  titre: 'ressource-2',
+  type: 'media',
+  matiere: 'Espagnol',
+  niveau: '2nde',
+  contenu: { description: '' },     
+  tags: [ '[]' ],
+  hasFile: true,
+  rawBody: [Object: null prototype] {
+    titre: 'ressource-2',
+    description: 'testtesttesttesttesttesttesttesttestv',
+    type: 'media',
+    matiere: 'Espagnol',
+    niveau: '2nde',
+    tags: '[]',
+    contenu: '{"description":""}',  
+    is_public: 'true'
+  }
+}
+info: Nouvelle ressource créée: 69c7d405-d047-42cf-973b-99fa84252587 par db0595dd-48ee-4f8c-8506-ec24923976af {"service":"diagana-school-backend","timestamp":"2025-08-12 23:03:52"}
 
-===============================================================
 
-- dans une session ulterieure je t'avais fait cette demande , ce que tu as fais voir frontend/.
-
-- je te ensuite demander un frontend de test voir test/ :
-
-apres avoir vu l'interface de test dans l'ensemble je suis satifait a 95% car ya des ajustement a faire .
-
-## ajustement ou changemment a faire :
-la barre de navigation nest pas reponsive et a dapter a la  version mobile voir image joint mobile/
-
-apres cette ajustement planifier limplementation complete du module auth dans le frontend 
-
-
-repondre en francais 

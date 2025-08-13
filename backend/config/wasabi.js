@@ -30,18 +30,31 @@ const testConnection = async () => {
 
 const uploadFile = async (file, key) => {
   try {
+    logger.info(`🚀 Début upload Wasabi - Fichier: ${file.originalname}, Type: ${file.mimetype}, Taille: ${file.size} bytes`);
+    logger.info(`📁 Clé S3: ${key}`);
+    
     const params = {
       Bucket: bucket,
       Key: key,
       Body: file.buffer,
       ContentType: file.mimetype,
-      ACL: 'public-read'
+      // ACL: 'public-read' // Désactivé car l'accès public n'est pas autorisé
     };
 
     const result = await s3.upload(params).promise();
+    logger.info(`✅ Upload S3 réussi - Location: ${result.Location}, Key: ${result.Key}`);
+    
+    // Générer une URL signée car l'accès public n'est pas autorisé
+    const signedUrl = s3.getSignedUrl('getObject', {
+      Bucket: bucket,
+      Key: result.Key,
+      Expires: 365 * 24 * 60 * 60 // 12 mois (365 jours)
+    });
+    logger.info(`🔗 URL signée générée avec succès`);
+    
     return {
       success: true,
-      url: result.Location,
+      url: signedUrl,
       key: result.Key
     };
   } catch (error) {
@@ -69,7 +82,7 @@ const deleteFile = async (key) => {
   }
 };
 
-const generateSignedUrl = async (key, expires = 3600) => {
+const generateSignedUrl = async (key, expires = 365 * 24 * 60 * 60) => {
   try {
     const url = s3.getSignedUrl('getObject', {
       Bucket: bucket,

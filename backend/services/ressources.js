@@ -8,7 +8,8 @@ class RessourcesService {
     try {
       let contenu = ressourceData.contenu;
 
-      if (file && ressourceData.type === 'document') {
+      // Traiter l'upload de fichier pour les types document, media et video
+      if (file && ['document', 'media', 'video'].includes(ressourceData.type)) {
         const fileName = generateFileName(file.originalname, userId);
         const uploadResult = await uploadFile(file, fileName);
         
@@ -42,7 +43,7 @@ class RessourcesService {
 
       return {
         success: true,
-        ressource: newRessource
+        data: newRessource
       };
     } catch (error) {
       logger.error('Erreur service création ressource:', error);
@@ -103,7 +104,10 @@ class RessourcesService {
 
       let contenu = updates.contenu || existingRessource.contenu;
 
-      if (file && updates.type === 'document') {
+      // Traiter l'upload de fichier pour les types document, media et video lors de la mise à jour
+      const resourceType = updates.type || existingRessource.type;
+      if (file && ['document', 'media', 'video'].includes(resourceType)) {
+        // Supprimer l'ancien fichier s'il existe
         if (existingRessource.contenu?.file_key) {
           await deleteFile(existingRessource.contenu.file_key);
         }
@@ -142,7 +146,7 @@ class RessourcesService {
 
       return {
         success: true,
-        ressource: updatedRessource
+        data: updatedRessource
       };
     } catch (error) {
       logger.error('Erreur service mise à jour ressource:', error);
@@ -291,7 +295,9 @@ class RessourcesService {
         throw new Error('Ressource non trouvée');
       }
 
-      if (ressource.type !== 'document' || !ressource.contenu?.file_url) {
+      // Autoriser le téléchargement pour les types document, media et video qui ont un fichier
+      const downloadableTypes = ['document', 'media', 'video'];
+      if (!downloadableTypes.includes(ressource.type) || !ressource.contenu?.file_url) {
         throw new Error('Cette ressource n\'est pas téléchargeable');
       }
 
@@ -322,6 +328,29 @@ class RessourcesService {
       };
     } catch (error) {
       logger.error('Erreur service mes ressources:', error);
+      throw error;
+    }
+  }
+
+  static async incrementView(ressourceId) {
+    try {
+      const updatedRessource = await RessourcesModel.incrementViews(ressourceId);
+
+      if (!updatedRessource) {
+        return {
+          success: false,
+          error: 'Erreur lors de la mise à jour'
+        };
+      }
+
+      logger.info(`Vues incrémentées pour ressource ${ressourceId}: ${updatedRessource.views_count}`);
+
+      return {
+        success: true,
+        vues: updatedRessource.views_count
+      };
+    } catch (error) {
+      logger.error('Erreur service increment view:', error);
       throw error;
     }
   }

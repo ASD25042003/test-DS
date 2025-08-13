@@ -49,7 +49,53 @@ const querySchema = Joi.object({
 class RessourcesController {
   static async create(req, res) {
     try {
-      const { error, value } = createRessourceSchema.validate(req.body);
+      // Parser le champ contenu si c'est un string JSON
+      const bodyData = { ...req.body };
+      if (typeof bodyData.contenu === 'string') {
+        try {
+          bodyData.contenu = JSON.parse(bodyData.contenu);
+        } catch (parseError) {
+          console.log('Contenu n\'est pas du JSON valide, traitement en tant qu\'objet:', bodyData.contenu);
+          // Si ce n'est pas du JSON, créer un objet contenu basique
+          bodyData.contenu = { raw: bodyData.contenu };
+        }
+      }
+      
+      // S'assurer qu'il y a au moins un objet contenu vide
+      if (!bodyData.contenu) {
+        bodyData.contenu = {};
+      }
+      
+      // Parser les tags si c'est une string
+      if (typeof bodyData.tags === 'string' && bodyData.tags.length > 0) {
+        bodyData.tags = bodyData.tags.split(',').map(tag => tag.trim()).filter(Boolean);
+      } else if (!bodyData.tags) {
+        bodyData.tags = [];
+      }
+      
+      // Parser le booléen is_public
+      if (typeof bodyData.is_public === 'string') {
+        bodyData.is_public = bodyData.is_public === 'true';
+      }
+      
+      console.log('Données reçues côté serveur:', {
+        titre: bodyData.titre,
+        type: bodyData.type,
+        matiere: bodyData.matiere,
+        niveau: bodyData.niveau,
+        contenu: bodyData.contenu,
+        tags: bodyData.tags,
+        hasFile: !!req.file,
+        fileDetails: req.file ? {
+          originalname: req.file.originalname,
+          mimetype: req.file.mimetype,
+          size: req.file.size,
+          buffer: req.file.buffer ? 'Buffer présent' : 'Buffer manquant'
+        } : 'Aucun fichier',
+        rawBody: req.body // Debug: voir toutes les données brutes
+      });
+
+      const { error, value } = createRessourceSchema.validate(bodyData);
       if (error) {
         return res.status(400).json({
           success: false,
@@ -325,6 +371,44 @@ class RessourcesController {
       res.status(500).json({
         success: false,
         error: 'Erreur lors de la récupération de vos ressources'
+      });
+    }
+  }
+
+  // Incrémenter le compteur de vues
+  static async incrementView(req, res) {
+    try {
+      const { id } = req.params;
+
+      if (!id) {
+        return res.status(400).json({
+          success: false,
+          error: 'ID de ressource requis'
+        });
+      }
+
+      const result = await RessourcesService.incrementView(id);
+
+      if (!result.success) {
+        return res.status(404).json({
+          success: false,
+          error: result.error || 'Ressource non trouvée'
+        });
+      }
+
+      logger.info(`Vue incrémentée pour ressource ${id}`);
+
+      res.json({
+        success: true,
+        message: 'Vue incrémentée avec succès',
+        vues: result.vues
+      });
+
+    } catch (error) {
+      logger.error('Erreur controller increment view:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Erreur lors de l\'incrémentation des vues'
       });
     }
   }

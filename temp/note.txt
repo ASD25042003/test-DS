@@ -1,0 +1,10 @@
+OBLIGATOIRE : commencer par lire la documentation complete voir : README.md et le repertoire docs .
+
+objectif preparer le projet pour le deployement sur render et passer en prod.
+
+commence par verifier ce que tu jugera important pour eviter et anticiper des probleme classique 
+et tout ce qui peut potentiellement nuire au deployement .
+
+guide moi sur rendrer voir capture decran . 
+
+assure toi que ces dossier ou fichiers sont ignorer : test-CAT temp-image temp

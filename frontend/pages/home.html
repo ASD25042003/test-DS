@@ -1,15 +1,799 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accueil - Diagana School</title>
-    <!-- Tailwind CSS CDN -->
-    <!-- Custom CSS -->
+    <title>Dashboard - Diagana School</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles/main.css">
+    <style>
+        :root {
+            --color-beige-50: #fefdfb;
+            --color-beige-100: #f7f5f0;
+            --color-beige-200: #f0ebe0;
+            --color-beige-300: #e8ddd0;
+            --color-beige-400: #d4c4a8;
+            --color-accent-primary: #d97706;
+            --color-accent-secondary: #059669;
+            --color-accent-info: #0ea5e9;
+            --color-accent-tertiary: #7c3aed;
+            --color-gray-900: #1a1a1a;
+            --color-gray-800: #2d2d2d;
+            --color-gray-700: #404040;
+            --color-gray-500: #737373;
+            --color-gray-400: #a3a3a3;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            background: var(--color-beige-50);
+            color: var(--color-gray-700);
+        }
+
+        .navbar {
+            background: rgba(254, 253, 251, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--color-beige-200);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .nav-brand {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--color-gray-900);
+            text-decoration: none;
+        }
+
+        .nav-link {
+            color: var(--color-gray-600);
+            font-weight: 500;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--color-gray-900);
+            background: var(--color-beige-100);
+        }
+
+        .nav-link.active {
+            color: var(--color-accent-primary);
+            background: rgba(217, 119, 6, 0.1);
+        }
+
+        .card {
+            background: var(--color-beige-100);
+            border: 1px solid var(--color-beige-200);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
+        }
+
+        .card:hover {
+            border-color: var(--color-beige-300);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+            transform: translateY(-1px);
+        }
+
+        .card-header {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--color-beige-200);
+        }
+
+        .resource-card {
+            background: var(--color-beige-100);
+            border: 1px solid var(--color-beige-200);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .resource-card:hover {
+            border-color: var(--color-accent-primary);
+            box-shadow: 0 8px 25px -5px rgba(217, 119, 6, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .resource-type-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            background: rgba(217, 119, 6, 0.1);
+            color: var(--color-accent-primary);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .user-avatar {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            background: var(--color-beige-300);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--color-gray-700);
+        }
+
+        /* Dropdown menu styles */
+        .user-dropdown {
+            position: relative;
+        }
+
+        .user-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--color-beige-50);
+            border: 1px solid var(--color-beige-200);
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            min-width: 180px;
+            z-index: 1000;
+            margin-top: 0.5rem;
+        }
+
+        .user-dropdown.active .user-dropdown-menu {
+            display: block;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: var(--color-gray-700);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .dropdown-item:hover {
+            background: var(--color-beige-100);
+            color: var(--color-gray-900);
+        }
+
+        .dropdown-item.logout {
+            color: #ef4444;
+            border-top: 1px solid var(--color-beige-200);
+        }
+
+        .dropdown-item.logout:hover {
+            background: rgba(239, 68, 68, 0.05);
+            color: #dc2626;
+        }
+
+        .user-info-clickable {
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .user-info-clickable:hover {
+            background: var(--color-beige-100);
+        }
+
+        .btn-primary {
+            background: var(--color-accent-primary);
+            color: white;
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background: #b45309;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(217, 119, 6, 0.25);
+        }
+
+        .btn-secondary {
+            background: var(--color-beige-200);
+            color: var(--color-gray-800);
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--color-beige-300);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-secondary:hover {
+            background: var(--color-beige-300);
+            border-color: var(--color-beige-400);
+        }
+
+        .stats-card {
+            text-align: center;
+        }
+
+        .stats-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--color-gray-900);
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            color: var(--color-gray-500);
+        }
+
+        /* Navigation mobile */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 100;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu-content {
+            background: var(--color-beige-50);
+            width: 280px;
+            height: 100%;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            padding: 2rem 1.5rem;
+        }
+
+        .mobile-menu.active .mobile-menu-content {
+            transform: translateX(0);
+        }
+
+        .mobile-nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            color: var(--color-gray-700);
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-nav-link:hover, .mobile-nav-link.active {
+            background: var(--color-beige-200);
+            color: var(--color-accent-primary);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--color-gray-700);
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        /* Bottom navigation mobile */
+        .bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 1rem;
+            left: 1rem;
+            right: 1rem;
+            background: rgba(254, 253, 251, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--color-beige-200);
+            border-radius: 20px;
+            padding: 0.75rem 0;
+            z-index: 50;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .bottom-nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--color-gray-500);
+            padding: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .bottom-nav-item.active {
+            color: var(--color-accent-primary);
+        }
+
+        .bottom-nav-icon {
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .bottom-nav-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* Cache le profil mobile sur desktop */
+        .mobile-profile-header {
+            display: none;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            /* Affiche le hamburger sur mobile */
+            .hamburger {
+                display: flex;
+            }
+
+            /* Cache les liens de navigation desktop sur mobile */
+            .navbar .flex.space-x-1 {
+                display: none;
+            }
+
+            /* Affiche uniquement la bottom navigation */
+            .bottom-nav {
+                display: flex;
+            }
+
+            /* Mobile Profile Header supprimé pour un design plus épuré */
+
+            /* Ajuste le contenu principal */
+            main {
+                padding-bottom: 8rem;
+                padding-top: 1rem;
+            }
+
+            .max-w-6xl {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+
+            /* Grid stats plus compact sur mobile */
+            .stats-card .stats-number {
+                font-size: 1.5rem;
+            }
+
+            .stats-card {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .max-w-6xl {
+                padding-left: 0.75rem;
+                padding-right: 0.75rem;
+            }
+
+            .stats-card {
+                padding: 0.75rem;
+            }
+
+            .stats-card .stats-number {
+                font-size: 1.25rem;
+            }
+
+            .resource-card {
+                padding: 1rem;
+            }
+        }
+
+        /* === STYLES CRITIQUES POUR RESSOURCES - IDENTIQUES À TEST-CAT === */
+        
+        .search-input {
+            width: 100%;
+            padding: 1rem 3rem 1rem 1rem;
+            font-size: 1rem;
+            background: var(--color-beige-100);
+            border: 1px solid var(--color-beige-200);
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--color-accent-primary);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.1);
+        }
+
+        .filter-pill {
+            padding: 0.4rem 0.8rem;
+            background: var(--color-beige-200);
+            border: 1px solid var(--color-beige-300);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--color-gray-700);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            flex-shrink: 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .filter-pill:hover,
+        .filter-pill.active {
+            background: var(--color-accent-primary);
+            color: white;
+            border-color: var(--color-accent-primary);
+        }
+
+        .filters-container {
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            display: flex;
+            gap: 0.5rem;
+            padding-bottom: 0.5rem;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+        }
+
+        .filters-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .sort-dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background: var(--color-beige-100);
+            border: 1px solid var(--color-beige-200);
+            border-radius: 8px;
+            min-width: 200px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            margin-top: 0.5rem;
+        }
+
+        .dropdown-content.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .dropdown-item:hover {
+            background: var(--color-beige-200);
+        }
+
+        .fab {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 3.5rem;
+            height: 3.5rem;
+            background: var(--color-accent-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: white;
+            font-size: 1.25rem;
+            z-index: 40;
+            border: none;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(217, 119, 6, 0.4);
+        }
+
+        /* Utilities flexbox nécessaires */
+        .flex { display: flex; }
+        .flex-col { flex-direction: column; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .gap-4 { gap: 1rem; }
+        .flex-1 { flex: 1; }
+        .relative { position: relative; }
+        .absolute { position: absolute; }
+        .right-3 { right: 0.75rem; }
+        .top-1\/2 { top: 50%; }
+        .transform { transform: translateY(-50%); }
+        .space-x-3 > * + * { margin-left: 0.75rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .mb-8 { margin-bottom: 2rem; }
+        .text-xs { font-size: 0.75rem; }
+        .text-gray-400 { color: var(--color-gray-400); }
+
+        @media (min-width: 1024px) {
+            .lg\:flex-row { flex-direction: row; }
+        }
+
+        @media (max-width: 768px) {
+            .fab {
+                bottom: 7rem;
+                right: 1.5rem;
+                width: 3rem;
+                height: 3rem;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Dashboard principal - Ressources récentes, Statistiques, Activité -->
+    <!-- Navigation Desktop -->
+    <nav class="navbar" id="desktopNav">
+        <div class="max-w-6xl mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <div class="hamburger" onclick="toggleMobileMenu()">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <a href="#dashboard" class="nav-brand">📚 Diagana School</a>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <div class="flex space-x-1">
+                    <a href="#dashboard" class="nav-link active" data-module="dashboard">📊 Dashboard</a>
+                    <a href="#resources" class="nav-link" data-module="resources">📚 Ressources</a>
+                    <a href="#collections" class="nav-link" data-module="collections">📁 Collections</a>
+                    <a href="#profile" class="nav-link" data-module="profile">👥 Profils</a>
+                </div>
+                
+                <!-- User Info -->
+                <div class="user-dropdown" id="userInfoDesktop">
+                    <div class="flex items-center space-x-3 user-info-clickable" onclick="toggleUserDropdown()">
+                        <div class="user-avatar" style="width: 2.5rem; height: 2.5rem;">...</div>
+                        <div class="text-sm user-info-desktop">
+                            <div style="color: var(--color-gray-900); font-weight: 500;">Chargement...</div>
+                            <div style="color: var(--color-gray-500);">...</div>
+                        </div>
+                        <div style="margin-left: 0.5rem; color: var(--color-gray-500); font-size: 0.75rem;">▾</div>
+                    </div>
+                    
+                    <!-- Dropdown Menu -->
+                    <div class="user-dropdown-menu" id="userDropdownMenu">
+                        <a href="#profile" class="dropdown-item" data-module="profile">
+                            <span class="mr-3">👤</span> Mon Profil
+                        </a>
+                        <a href="#settings" class="dropdown-item">
+                            <span class="mr-3">⚙️</span> Paramètres
+                        </a>
+                        <button onclick="window.diaganaApp && window.diaganaApp.logout()" class="dropdown-item logout">
+                            <span class="mr-3">🚪</span> Déconnexion
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu" id="mobileMenu" onclick="closeMobileMenu(event)">
+        <div class="mobile-menu-content" onclick="event.stopPropagation()">
+            <div class="flex items-center space-x-3 mb-8" id="mobileUserInfo">
+                <div class="user-avatar">...</div>
+                <div>
+                    <div style="color: var(--color-gray-900); font-weight: 600;">Chargement...</div>
+                    <div style="color: var(--color-gray-500); font-size: 0.875rem;">...</div>
+                </div>
+            </div>
+            
+            <div class="space-y-2">
+                <a href="#dashboard" class="mobile-nav-link active" data-module="dashboard">
+                    <span class="text-lg mr-3">📚</span> Dashboard
+                </a>
+                <a href="#resources" class="mobile-nav-link" data-module="resources">
+                    <span class="text-lg mr-3">📁</span> Ressources
+                </a>
+                <a href="#collections" class="mobile-nav-link" data-module="collections">
+                    <span class="text-lg mr-3">📁</span> Collections
+                </a>
+                <a href="#profile" class="mobile-nav-link" data-module="profile">
+                    <span class="text-lg mr-3">👥</span> Profils
+                </a>
+                
+                <!-- Séparateur -->
+                <div style="border-top: 1px solid var(--color-beige-200); margin: 1rem 0;"></div>
+                
+                <!-- Bouton de déconnexion -->
+                <button onclick="window.diaganaApp && window.diaganaApp.logout()" class="mobile-nav-link w-full text-left" style="color: #ef4444; border: none; background: none;">
+                    <span class="text-lg mr-3">🚪</span> Déconnexion
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Profile Header - SUPPRIMÉ POUR UN DESIGN PLUS ÉPURÉ -->
+
+    <!-- Bottom Navigation Mobile -->
+    <nav class="bottom-nav" id="bottomNav">
+        <a href="#dashboard" class="bottom-nav-item active" data-module="dashboard">
+            <div class="bottom-nav-icon">📚</div>
+            <div class="bottom-nav-label">Dashboard</div>
+        </a>
+        <a href="#resources" class="bottom-nav-item" data-module="resources">
+            <div class="bottom-nav-icon">📁</div>
+            <div class="bottom-nav-label">Ressources</div>
+        </a>
+        <a href="#collections" class="bottom-nav-item" data-module="collections">
+            <div class="bottom-nav-icon">📁</div>
+            <div class="bottom-nav-label">Collections</div>
+        </a>
+        <a href="#profile" class="bottom-nav-item" data-module="profile">
+            <div class="bottom-nav-icon">👥</div>
+            <div class="bottom-nav-label">Profils</div>
+        </a>
+    </nav>
+
+    <!-- Contenu principal SPA -->
+    <main class="max-w-6xl mx-auto px-6 py-8">
+        <div id="app-content">
+            <!-- Le contenu sera injecté ici par les modules SPA -->
+            <div class="loading animate-fade-in">
+                <div>
+                    <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-orange-600 mr-3"></div>
+                    Chargement de l'application...
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Variables globales pour la SPA
+        let currentModule = null;
+        let userData = null;
+
+        // Fonctions menu mobile
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+        }
+
+        function closeMobileMenu(event) {
+            if (event.target === event.currentTarget) {
+                const mobileMenu = document.getElementById('mobileMenu');
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        function showUserMenu() {
+            // Fonction placeholder pour menu utiliséteur mobile
+            console.log('Menu utiliséteur mobile');
+        }
+
+        // Fonction pour toggle le dropdown utilisateur desktop
+        function toggleUserDropdown() {
+            const dropdown = document.querySelector('.user-dropdown');
+            dropdown.classList.toggle('active');
+        }
+
+        // Fermer le dropdown en cliquant ailleurs
+        document.addEventListener('click', function(event) {
+            const dropdown = document.querySelector('.user-dropdown');
+            if (dropdown && !dropdown.contains(event.target)) {
+                dropdown.classList.remove('active');
+            }
+        });
+
+        // Fermer le menu mobile avec la touche Escape
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const mobileMenu = document.getElementById('mobileMenu');
+                if (mobileMenu.classList.contains('active')) {
+                    mobileMenu.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            }
+        });
+
+        // Plus besoin de chargement manuel - le script module se charge automatiquement
+        
+        function showLoadingError() {
+            const container = document.getElementById('app-content');
+            if (container) {
+                container.innerHTML = `
+                    <div class="animate-fade-in">
+                        <div class="card" style="border-color: #ef4444; background: rgba(239, 68, 68, 0.05);">
+                            <div class="text-center">
+                                <div style="font-size: 3rem; margin-bottom: 1rem;">❌</div>
+                                <h2 class="text-xl font-semibold mb-4" style="color: #ef4444;">
+                                    Erreur de chargement
+                                </h2>
+                                <p style="color: var(--color-gray-600); margin-bottom: 2rem;">
+                                    Impossible de charger l'application. Veuillez vérifier la console pour plus de détails.
+                                </p>
+                                <button class="btn-primary" onclick="location.reload()">
+                                    🔄 Recharger la page
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Fonctions utilitaires globales pour compatibilité test-CAT
+        window.toggleMobileMenu = toggleMobileMenu;
+        window.closeMobileMenu = closeMobileMenu;
+
+        // Animation au scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observer sera utilisé par les modules chargés dynamiquement
+        window.scrollObserver = observer;
+    </script>
     
-    <!-- Scripts JS -->
+    <!-- Chargement de DiaganaApp -->
+    <script type="module" src="/static/js/home.js"></script>
 </body>
 </html>
+
+
+

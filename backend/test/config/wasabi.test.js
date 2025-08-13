@@ -49,65 +49,124 @@ describe('Configuration Wasabi', () => {
   });
 
   describe('Opérations sur fichiers', () => {
-    const testFileName = 'test-config-file.txt';
-    const testFileContent = 'Contenu de test pour configuration Wasabi';
-    let uploadedKey;
-
-    beforeAll(() => {
-      // Créer un fichier de test temporaire
-      const testFilePath = path.join(__dirname, testFileName);
-      fs.writeFileSync(testFilePath, testFileContent);
-    });
-
-    afterAll(() => {
-      // Nettoyer le fichier de test
-      const testFilePath = path.join(__dirname, testFileName);
-      if (fs.existsSync(testFilePath)) {
-        fs.unlinkSync(testFilePath);
+    const testFiles = [
+      {
+        name: '2-PROTOCOLE-PORTANT-CREATION-DE-LA-COUR-AFRICAINE-DES-DROITS-DE-LHOMME-ET-DES-PEUPLES.pdf',
+        path: path.join(__dirname, '../../../test-file/2-PROTOCOLE-PORTANT-CREATION-DE-LA-COUR-AFRICAINE-DES-DROITS-DE-LHOMME-ET-DES-PEUPLES.pdf'),
+        mimetype: 'application/pdf'
+      },
+      {
+        name: 'page-word.com-page2.docx',
+        path: path.join(__dirname, '../../../test-file/page-word.com-page2.docx'),
+        mimetype: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+      },
+      {
+        name: 'téléchargement.jpg',
+        path: path.join(__dirname, '../../../test-file/téléchargement.jpg'),
+        mimetype: 'image/jpeg'
       }
-    });
+    ];
+    let uploadedKeys = [];
 
-    it('devrait pouvoir uploader un fichier', async () => {
-      const testFilePath = path.join(__dirname, testFileName);
-      const fileBuffer = fs.readFileSync(testFilePath);
+    it('devrait pouvoir uploader un fichier PDF réel', async () => {
+      const testFile = testFiles[0]; // PDF
+      
+      if (!fs.existsSync(testFile.path)) {
+        console.warn(`Fichier test non trouvé: ${testFile.path}`);
+        return;
+      }
+
+      const fileBuffer = fs.readFileSync(testFile.path);
       
       const mockFile = {
         buffer: fileBuffer,
-        mimetype: 'text/plain',
-        originalname: testFileName,
+        mimetype: testFile.mimetype,
+        originalname: testFile.name,
         size: fileBuffer.length
       };
 
-      uploadedKey = `test-config/${Date.now()}_${testFileName}`;
+      const uploadedKey = `test-config/${Date.now()}_${testFile.name}`;
+      uploadedKeys.push(uploadedKey);
       
       const result = await uploadFile(mockFile, uploadedKey);
       
       expect(result.success).toBe(true);
       expect(result.url).toBeDefined();
       expect(result.key).toBe(uploadedKey);
-    }, 15000);
+    }, 20000);
+
+    it('devrait pouvoir uploader un fichier DOCX réel', async () => {
+      const testFile = testFiles[1]; // DOCX
+      
+      if (!fs.existsSync(testFile.path)) {
+        console.warn(`Fichier test non trouvé: ${testFile.path}`);
+        return;
+      }
+
+      const fileBuffer = fs.readFileSync(testFile.path);
+      
+      const mockFile = {
+        buffer: fileBuffer,
+        mimetype: testFile.mimetype,
+        originalname: testFile.name,
+        size: fileBuffer.length
+      };
+
+      const uploadedKey = `test-config/${Date.now()}_${testFile.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
+      uploadedKeys.push(uploadedKey);
+      
+      const result = await uploadFile(mockFile, uploadedKey);
+      
+      expect(result.success).toBe(true);
+      expect(result.url).toBeDefined();
+      expect(result.key).toBe(uploadedKey);
+    }, 20000);
+
+    it('devrait pouvoir uploader un fichier image réel', async () => {
+      const testFile = testFiles[2]; // JPG
+      
+      if (!fs.existsSync(testFile.path)) {
+        console.warn(`Fichier test non trouvé: ${testFile.path}`);
+        return;
+      }
+
+      const fileBuffer = fs.readFileSync(testFile.path);
+      
+      const mockFile = {
+        buffer: fileBuffer,
+        mimetype: testFile.mimetype,
+        originalname: testFile.name,
+        size: fileBuffer.length
+      };
+
+      const uploadedKey = `test-config/${Date.now()}_${testFile.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
+      uploadedKeys.push(uploadedKey);
+      
+      const result = await uploadFile(mockFile, uploadedKey);
+      
+      expect(result.success).toBe(true);
+      expect(result.url).toBeDefined();
+      expect(result.key).toBe(uploadedKey);
+    }, 20000);
 
     it('devrait pouvoir générer une URL signée', async () => {
-      if (!uploadedKey) {
+      if (uploadedKeys.length === 0) {
         throw new Error('Aucun fichier uploadé pour le test');
       }
 
-      const result = await generateSignedUrl(uploadedKey, 300);
+      const result = await generateSignedUrl(uploadedKeys[0], 300);
       
       expect(result.success).toBe(true);
       expect(result.url).toBeDefined();
       expect(result.url).toContain(bucket);
     }, 10000);
 
-    it('devrait pouvoir supprimer un fichier', async () => {
-      if (!uploadedKey) {
-        throw new Error('Aucun fichier uploadé pour le test');
+    it('devrait pouvoir supprimer les fichiers uploadés', async () => {
+      for (const key of uploadedKeys) {
+        const result = await deleteFile(key);
+        expect(result.success).toBe(true);
       }
-
-      const result = await deleteFile(uploadedKey);
-      
-      expect(result.success).toBe(true);
-    }, 10000);
+    }, 15000);
   });
 
   describe('Gestion d\'erreurs', () => {

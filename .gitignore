@@ -122,9 +122,13 @@ config/local.js
 config/production.js
 
 # Fichiers temporaires
-#temp/
-#.tmp
-#*.tmp
+temp/
+temp-image/
+test-CAT/
+.tmp
+*.tmp
+
+
 
 # IDE
 .vscode/

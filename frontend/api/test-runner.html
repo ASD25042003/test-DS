@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tests Clients API - Diagana School</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #fefdfb;
+            color: #1a1a1a;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid #d97706;
+        }
+        .test-result {
+            background: #f9f9f9;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        .success { border-left-color: #059669; }
+        .error { border-left-color: #dc2626; }
+        button {
+            background: #d97706;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #b45309;
+        }
+        .status {
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 4px;
+            margin: 5px 0;
+        }
+        .status.pass { background: #d1fae5; color: #059669; }
+        .status.fail { background: #fee2e2; color: #dc2626; }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Tests Clients API - Diagana School</h1>
+        <p>Cette page permet de tester les clients API frontend directement dans le navigateur.</p>
+        
+        <div class="test-section">
+            <h3>🚀 Tests Rapides</h3>
+            <button onclick="runQuickTests()">Lancer Tests Rapides</button>
+            <button onclick="runValidationTests()">Tests Validation</button>
+            <button onclick="runCohérenceTests()">Tests Cohérence Backend</button>
+            <button onclick="clearResults()">Effacer Résultats</button>
+            
+            <div id="quick-results"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>📋 Tests Détaillés</h3>
+            <button onclick="testResourcesAPI()">Test Resources API</button>
+            <button onclick="testCollectionsAPI()">Test Collections API</button>
+            <button onclick="testProfileAPI()">Test Profile API</button>
+            <button onclick="testCommentsAPI()">Test Comments API</button>
+            
+            <div id="detailed-results"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🔗 Tests Intégration</h3>
+            <p><strong>⚠️ Attention :</strong> Ces tests nécessitent que le serveur backend soit démarré sur port 3000.</p>
+            <button onclick="testBackendConnection()">Test Connexion Backend</button>
+            <button onclick="testRealAPI()">Test API Réelle (avec backend)</button>
+            
+            <div id="integration-results"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Variables globales pour les tests
+        let testResults = [];
+        
+        // Fonction utilitaire pour afficher les résultats
+        function displayResult(containerId, title, status, details) {
+            const container = document.getElementById(containerId);
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `test-result ${status === 'PASS' ? 'success' : 'error'}`;
+            
+            resultDiv.innerHTML = `
+                <div class="status ${status === 'PASS' ? 'pass' : 'fail'}">${status}</div>
+                <strong>${title}</strong>
+                <pre>${details}</pre>
+            `;
+            
+            container.appendChild(resultDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // Fonction pour effacer les résultats
+        window.clearResults = function() {
+            document.getElementById('quick-results').innerHTML = '';
+            document.getElementById('detailed-results').innerHTML = '';
+            document.getElementById('integration-results').innerHTML = '';
+            testResults = [];
+        };
+
+        // Tests rapides de chargement des modules
+        window.runQuickTests = async function() {
+            const container = 'quick-results';
+            
+            try {
+                // Test 1: Chargement du client de base
+                const { apiClient, API_CONFIG } = await import('/static/api/index.js');
+                displayResult(container, 'Chargement ApiClient', 'PASS', 
+                    `✅ ApiClient chargé\n✅ Endpoints: ${Object.keys(API_CONFIG.ENDPOINTS).join(', ')}`);
+
+                // Test 2: Chargement des clients spécialisés
+                const modules = [
+                    { name: 'AuthApi', path: '/static/api/auth.js' },
+                    { name: 'ResourcesApi', path: '/static/api/resources.js' },
+                    { name: 'CollectionsApi', path: '/static/api/collections.js' },
+                    { name: 'ProfileApi', path: '/static/api/profile.js' },
+                    { name: 'CommentsApi', path: '/static/api/comments.js' }
+                ];
+
+                for (const module of modules) {
+                    try {
+                        const imported = await import(module.path);
+                        const apiInstance = imported[module.name.toLowerCase().replace('api', 'Api')];
+                        displayResult(container, `Chargement ${module.name}`, 'PASS',
+                            `✅ ${module.name} chargé et instancié`);
+                    } catch (error) {
+                        displayResult(container, `Chargement ${module.name}`, 'FAIL',
+                            `❌ Erreur: ${error.message}`);
+                    }
+                }
+
+                // Test 3: Export centralisé
+                const { getApi } = await import('/static/api/clients.js');
+                const api = await getApi();
+                displayResult(container, 'Export centralisé', 'PASS',
+                    `✅ Clients disponibles: ${Object.keys(api).join(', ')}`);
+
+            } catch (error) {
+                displayResult(container, 'Tests rapides', 'FAIL',
+                    `❌ Erreur globale: ${error.message}`);
+            }
+        };
+
+        // Tests de validation des données
+        window.runValidationTests = async function() {
+            const container = 'quick-results';
+            
+            try {
+                const { getApi } = await import('/static/api/clients.js');
+                const api = await getApi();
+
+                // Test validation resources
+                const resourceErrors = api.resources.validateResourceData({
+                    titre: 'Te', // Trop court
+                    type: 'invalid', // Type invalide
+                    contenu: 'string' // Doit être objet
+                });
+
+                const hasExpectedErrors = resourceErrors.titre && resourceErrors.type && resourceErrors.contenu;
+                displayResult(container, 'Validation Resources', hasExpectedErrors ? 'PASS' : 'FAIL',
+                    hasExpectedErrors ? 
+                        `✅ Erreurs détectées correctement:\n${JSON.stringify(resourceErrors, null, 2)}` :
+                        `❌ Validation incomplète: ${JSON.stringify(resourceErrors, null, 2)}`);
+
+                // Test validation collections
+                const collectionErrors = api.collections.validateCollectionData({
+                    nom: 'Te', // Trop court
+                    is_public: 'invalid' // Doit être boolean
+                });
+
+                const hasColErrors = collectionErrors.nom && collectionErrors.is_public;
+                displayResult(container, 'Validation Collections', hasColErrors ? 'PASS' : 'FAIL',
+                    hasColErrors ?
+                        `✅ Erreurs détectées correctement:\n${JSON.stringify(collectionErrors, null, 2)}` :
+                        `❌ Validation incomplète: ${JSON.stringify(collectionErrors, null, 2)}`);
+
+                // Test validation profile
+                const profileErrors = api.profile.validateSearchOptions({
+                    q: 'J', // Trop court
+                    role: 'invalid', // Rôle invalide
+                    page: 0 // Page invalide
+                });
+
+                const hasProfileErrors = profileErrors.q && profileErrors.role && profileErrors.page;
+                displayResult(container, 'Validation Profile', hasProfileErrors ? 'PASS' : 'FAIL',
+                    hasProfileErrors ?
+                        `✅ Erreurs détectées correctement:\n${JSON.stringify(profileErrors, null, 2)}` :
+                        `❌ Validation incomplète: ${JSON.stringify(profileErrors, null, 2)}`);
+
+            } catch (error) {
+                displayResult(container, 'Tests validation', 'FAIL',
+                    `❌ Erreur: ${error.message}`);
+            }
+        };
+
+        // Tests de cohérence avec le backend
+        window.runCohérenceTests = async function() {
+            const container = 'quick-results';
+            
+            try {
+                // Test endpoints
+                const { API_CONFIG } = await import('/static/api/index.js');
+                const expectedEndpoints = {
+                    RESOURCES: '/ressources',
+                    PROFILE: '/profil',
+                    COMMENTS: '/commentaires'
+                };
+
+                let endpointsOK = true;
+                let endpointDetails = '';
+                
+                for (const [key, expectedValue] of Object.entries(expectedEndpoints)) {
+                    const actualValue = API_CONFIG.ENDPOINTS[key];
+                    const isCorrect = actualValue === expectedValue;
+                    endpointsOK = endpointsOK && isCorrect;
+                    endpointDetails += `${key}: ${actualValue} ${isCorrect ? '✅' : '❌'}\n`;
+                }
+
+                displayResult(container, 'Cohérence Endpoints', endpointsOK ? 'PASS' : 'FAIL',
+                    `${endpointsOK ? '✅' : '❌'} Endpoints backend:\n${endpointDetails}`);
+
+                // Test types ressources
+                const validTypes = ['document', 'media', 'video', 'lien'];
+                const typeTest = validTypes.includes('lien') && !validTypes.includes('link');
+                displayResult(container, 'Types Ressources', typeTest ? 'PASS' : 'FAIL',
+                    `${typeTest ? '✅' : '❌'} Types corrects: ${validTypes.join(', ')}`);
+
+                // Test rôles utilisateurs
+                const validRoles = ['professeur', 'eleve'];
+                const roleTest = validRoles.includes('professeur') && validRoles.includes('eleve');
+                displayResult(container, 'Rôles Utilisateurs', roleTest ? 'PASS' : 'FAIL',
+                    `${roleTest ? '✅' : '❌'} Rôles corrects: ${validRoles.join(', ')}`);
+
+            } catch (error) {
+                displayResult(container, 'Tests cohérence', 'FAIL',
+                    `❌ Erreur: ${error.message}`);
+            }
+        };
+
+        // Test d'une API spécifique - Resources
+        window.testResourcesAPI = async function() {
+            const container = 'detailed-results';
+            
+            try {
+                const { resourcesApi } = await import('/static/api/resources.js');
+                
+                // Test méthodes disponibles
+                const expectedMethods = ['getAll', 'getById', 'create', 'update', 'delete', 
+                                       'toggleLike', 'toggleFavorite', 'getPopular', 'getRecent', 
+                                       'search', 'getMy', 'getFavorites', 'validateResourceData'];
+                
+                const availableMethods = expectedMethods.filter(method => 
+                    typeof resourcesApi[method] === 'function');
+                
+                const allMethodsPresent = availableMethods.length === expectedMethods.length;
+                
+                displayResult(container, 'Resources API - Méthodes', allMethodsPresent ? 'PASS' : 'FAIL',
+                    `${allMethodsPresent ? '✅' : '❌'} Méthodes disponibles (${availableMethods.length}/${expectedMethods.length}):\n${availableMethods.join(', ')}`);
+                    
+                // Test validation
+                const validation = resourcesApi.validateResourceData({
+                    titre: 'Test Resource',
+                    type: 'document',
+                    contenu: { data: 'test' }
+                });
+                
+                const validationOK = Object.keys(validation).length === 0;
+                displayResult(container, 'Resources API - Validation OK', validationOK ? 'PASS' : 'FAIL',
+                    `${validationOK ? '✅' : '❌'} Données valides acceptées`);
+
+            } catch (error) {
+                displayResult(container, 'Resources API', 'FAIL',
+                    `❌ Erreur: ${error.message}`);
+            }
+        };
+
+        // Test connexion backend
+        window.testBackendConnection = async function() {
+            const container = 'integration-results';
+            
+            try {
+                const response = await fetch('/api', {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    displayResult(container, 'Connexion Backend', 'PASS',
+                        `✅ Backend accessible sur port 3000\n${JSON.stringify(data, null, 2)}`);
+                } else {
+                    displayResult(container, 'Connexion Backend', 'FAIL',
+                        `❌ Backend inaccessible: ${response.status} ${response.statusText}`);
+                }
+            } catch (error) {
+                displayResult(container, 'Connexion Backend', 'FAIL',
+                    `❌ Erreur connexion: ${error.message}\n\n⚠️  Vérifiez que le serveur backend est démarré:\ncd backend && npm run dev`);
+            }
+        };
+
+        // Définir les autres fonctions de test comme globales
+        window.testCollectionsAPI = async function() {
+            const container = 'detailed-results';
+            try {
+                const { collectionsApi } = await import('/static/api/collections.js');
+                const methods = ['getAll', 'create', 'getById', 'update', 'delete', 'addRessource', 
+                               'removeRessource', 'reorderRessources', 'duplicate', 'getPopular', 'validateCollectionData'];
+                const available = methods.filter(m => typeof collectionsApi[m] === 'function');
+                displayResult(container, 'Collections API', 'PASS',
+                    `✅ Méthodes (${available.length}/${methods.length}): ${available.join(', ')}`);
+            } catch (error) {
+                displayResult(container, 'Collections API', 'FAIL', `❌ ${error.message}`);
+            }
+        };
+
+        window.testProfileAPI = async function() {
+            const container = 'detailed-results';
+            try {
+                const { profileApi } = await import('/static/api/profile.js');
+                const methods = ['getAllUsers', 'getUsersByRole', 'searchUsers', 'getProfile', 
+                               'followUser', 'unfollowUser', 'formatFullName', 'calculateAge'];
+                const available = methods.filter(m => typeof profileApi[m] === 'function');
+                displayResult(container, 'Profile API', 'PASS',
+                    `✅ Méthodes (${available.length}/${methods.length}): ${available.join(', ')}`);
+            } catch (error) {
+                displayResult(container, 'Profile API', 'FAIL', `❌ ${error.message}`);
+            }
+        };
+
+        window.testCommentsAPI = async function() {
+            const container = 'detailed-results';
+            try {
+                const { commentsApi } = await import('/static/api/comments.js');
+                const methods = ['getByRessource', 'create', 'update', 'delete', 'reply', 
+                               'buildCommentsTree', 'extractMentions', 'formatComment'];
+                const available = methods.filter(m => typeof commentsApi[m] === 'function');
+                
+                // Test mention extraction
+                const mentions = commentsApi.extractMentions('Salut @jean et @"Marie Martin"');
+                const mentionsOK = mentions.length === 2;
+                
+                displayResult(container, 'Comments API', 'PASS',
+                    `✅ Méthodes (${available.length}/${methods.length}): ${available.join(', ')}\n✅ Mentions: ${mentionsOK ? 'OK' : 'FAIL'}`);
+            } catch (error) {
+                displayResult(container, 'Comments API', 'FAIL', `❌ ${error.message}`);
+            }
+        };
+
+        window.testRealAPI = async function() {
+            const container = 'integration-results';
+            try {
+                const { getApi } = await import('/static/api/clients.js');
+                const api = await getApi();
+                
+                // Test endpoint ressources populaires (sans auth)
+                const response = await api.resources.getPopular({ limit: 5 });
+                displayResult(container, 'Test API Réelle - Resources', 'PASS',
+                    `✅ Endpoint /api/ressources/popular accessible\n${JSON.stringify(response, null, 2)}`);
+                    
+            } catch (error) {
+                if (error.message.includes('fetch')) {
+                    displayResult(container, 'Test API Réelle', 'FAIL',
+                        `❌ Serveur inaccessible. Démarrez le backend:\ncd backend && npm run dev`);
+                } else {
+                    displayResult(container, 'Test API Réelle', 'FAIL',
+                        `❌ Erreur: ${error.message}`);
+                }
+            }
+        };
+
+        // Auto-démarrage des tests rapides
+        setTimeout(runQuickTests, 1000);
+    </script>
+</body>
+</html>

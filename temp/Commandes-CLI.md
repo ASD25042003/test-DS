@@ -1,5 +1,5 @@
 
-
+ne pas tenire compte de ce fichier 
 
 ## ⚙️ Commandes CLI (terminal principal)
 

@@ -4,12 +4,116 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion - Diagana School</title>
-    <!-- Tailwind CSS CDN -->
-    <!-- Custom CSS -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles/main.css">
 </head>
-<body>
-    <!-- Page d'authentification - Connexion et Inscription -->
+<body class="min-h-screen flex items-center justify-center p-6">
     
-    <!-- Scripts JS -->
+    <!-- Conteneur principal -->
+    <div class="w-full max-w-md">
+        
+        <!-- Logo et titre -->
+        <div class="text-center mb-8 animate-slide-in">
+            <div class="logo">📚 Diagana School</div>
+            <p style="color: var(--color-gray-500); font-size: 1.1rem;">
+                Votre plateforme éducative moderne
+            </p>
+        </div>
+
+        <!-- Conteneur formulaire de connexion -->
+        <div id="login-form-container" class="animate-slide-in"></div>
+
+        <!-- Conteneur formulaire d'inscription -->
+        <div id="register-form-container" class="animate-slide-in" style="display: none;"></div>
+        
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="/static/js/auth.js"></script>
+    
+    <script>
+        // Fonctions globales pour la compatibilité legacy
+        function showRegister() {
+            if (window.authController) {
+                window.authController.showRegister();
+            }
+        }
+
+        function showLogin() {
+            if (window.authController) {
+                window.authController.showLogin();
+            }
+        }
+
+        // Animation focus des inputs (appliquée globalement)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Observer pour détecter les nouveaux inputs ajoutés dynamiquement
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    mutation.addedNodes.forEach(function(node) {
+                        if (node.nodeType === 1) {
+                            const inputs = node.querySelectorAll ? node.querySelectorAll('.form-input') : [];
+                            inputs.forEach(attachInputAnimations);
+                            
+                            if (node.classList && node.classList.contains('form-input')) {
+                                attachInputAnimations(node);
+                            }
+                        }
+                    });
+                });
+            });
+
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true
+            });
+
+            // Appliquer aux inputs existants
+            document.querySelectorAll('.form-input').forEach(attachInputAnimations);
+        });
+
+        function attachInputAnimations(input) {
+            input.addEventListener('focus', function() {
+                this.style.transform = 'scale(1.01)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.style.transform = 'scale(1)';
+            });
+        }
+
+        // Fonctions menu mobile (si nécessaire)
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            if (mobileMenu) {
+                mobileMenu.classList.toggle('active');
+                document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+            }
+        }
+
+        function closeMobileMenu(event) {
+            if (event.target === event.currentTarget) {
+                const mobileMenu = document.getElementById('mobileMenu');
+                if (mobileMenu) {
+                    mobileMenu.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            }
+        }
+
+        // Fermer le menu mobile avec la touche Escape
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const mobileMenu = document.getElementById('mobileMenu');
+                if (mobileMenu && mobileMenu.classList.contains('active')) {
+                    mobileMenu.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            }
+        });
+    </script>
 </body>
 </html>

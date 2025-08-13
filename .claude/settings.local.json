@@ -7,7 +7,19 @@
       "Bash(npm run migrate:*)",
       "Bash(taskkill:*)",
       "Bash(timeout 60 npm test)",
-      "Bash(timeout 10 npm test -- --testNamePattern=\"devrait créer un nouveau professeur\")"
+      "Bash(timeout 10 npm test -- --testNamePattern=\"devrait créer un nouveau professeur\")",
+      "Bash(git add:*)",
+      "Bash(git push:*)",
+      "Bash(tree:*)",
+      "Bash(move resources-new.js resources.js)",
+      "Bash(powershell:*)",
+      "Bash(npm start)",
+      "Bash(node:*)",
+      "Bash(curl:*)",
+      "Bash(rm:*)",
+      "Bash(cp:*)",
+      "Bash(move upload-form-fixed.js upload-form.js)",
+      "Bash(find:*)"
     ],
     "deny": []
   }

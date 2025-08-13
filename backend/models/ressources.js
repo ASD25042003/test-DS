@@ -374,6 +374,40 @@ class RessourcesModel {
       throw error;
     }
   }
+
+  // Incrémenter les vues (sans restriction d'auteur)
+  static async incrementViews(id) {
+    try {
+      // D'abord récupérer la ressource actuelle
+      const { data: ressource, error: fetchError } = await supabaseAdmin
+        .from('ressources')
+        .select('views_count')
+        .eq('id', id)
+        .single();
+
+      if (fetchError) throw fetchError;
+
+      // Incrémenter et mettre à jour
+      const { data, error } = await supabaseAdmin
+        .from('ressources')
+        .update({
+          views_count: (ressource.views_count || 0) + 1,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', id)
+        .select(`
+          *,
+          users!ressources_author_id_fkey(nom, prenom, role)
+        `)
+        .single();
+
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      logger.error('Erreur incrémentation vues:', error);
+      throw error;
+    }
+  }
 }
 
 module.exports = RessourcesModel;

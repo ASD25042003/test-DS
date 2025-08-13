@@ -11,7 +11,23 @@ if (!JWT_SECRET) {
 
 const generateToken = (payload) => {
   try {
-    return jwt.sign(payload, JWT_SECRET, {
+    // Filtrer les données sensibles avant de générer le token
+    const filteredPayload = {
+      userId: payload.userId,
+      email: payload.email,
+      role: payload.role,
+      nom: payload.nom,
+      prenom: payload.prenom
+    };
+    
+    // Supprimer les propriétés undefined
+    Object.keys(filteredPayload).forEach(key => {
+      if (filteredPayload[key] === undefined) {
+        delete filteredPayload[key];
+      }
+    });
+    
+    return jwt.sign(filteredPayload, JWT_SECRET, {
       expiresIn: JWT_EXPIRES_IN,
       issuer: 'diagana-school',
       audience: 'diagana-school-users'

@@ -5,7 +5,7 @@ const {
   optionalAuth, 
   rateLimitByUser 
 } = require('../middlewares/auth');
-const { uploadSingle, handleUploadError } = require('../config/multer');
+const { uploadSingle, uploadResourceMiddleware, handleUploadError } = require('../config/multer');
 
 const router = express.Router();
 
@@ -39,7 +39,7 @@ router.get('/',
 router.post('/', 
   authenticateToken,
   rateLimitByUser(15 * 60 * 1000, 20),
-  uploadSingle,
+  uploadResourceMiddleware,  // Nouveau middleware qui gère champs texte + fichier
   handleUploadError,
   RessourcesController.create
 );
@@ -52,7 +52,7 @@ router.get('/:id',
 router.put('/:id', 
   authenticateToken,
   rateLimitByUser(15 * 60 * 1000, 30),
-  uploadSingle,
+  uploadResourceMiddleware,  // Nouveau middleware qui gère champs texte + fichier
   handleUploadError,
   RessourcesController.update
 );
@@ -77,6 +77,12 @@ router.post('/:id/favorite',
 router.get('/:id/download', 
   optionalAuth,
   RessourcesController.download
+);
+
+router.post('/:id/view', 
+  optionalAuth,
+  rateLimitByUser(15 * 60 * 1000, 200),
+  RessourcesController.incrementView
 );
 
 module.exports = router;
