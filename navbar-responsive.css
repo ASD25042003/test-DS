@@ -1,0 +1,233 @@
+/* CSS Global pour la navbar responsive - Diagana School */
+
+/* Variables CSS communes */
+:root {
+    --color-beige-50: #fefdfb;
+    --color-beige-100: #f7f5f0;
+    --color-beige-200: #f0ebe0;
+    --color-beige-300: #e8ddd0;
+    --color-beige-400: #d4c4a8;
+    --color-accent-primary: #d97706;
+    --color-accent-secondary: #059669;
+    --color-accent-info: #0ea5e9;
+    --color-accent-tertiary: #7c3aed;
+    --color-gray-900: #1a1a1a;
+    --color-gray-800: #2d2d2d;
+    --color-gray-700: #404040;
+    --color-gray-500: #737373;
+    --color-gray-400: #a3a3a3;
+}
+
+/* Styles de base pour la navbar */
+.navbar {
+    background: rgba(254, 253, 251, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--color-beige-200);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.nav-brand {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-gray-900);
+    text-decoration: none;
+}
+
+.nav-link {
+    color: var(--color-gray-600);
+    font-weight: 500;
+    text-decoration: none;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+    color: var(--color-gray-900);
+    background: var(--color-beige-100);
+}
+
+.nav-link.active {
+    color: var(--color-accent-primary);
+    background: rgba(217, 119, 6, 0.1);
+}
+
+/* Navigation mobile */
+.mobile-menu {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 100;
+}
+
+.mobile-menu.active {
+    display: flex;
+}
+
+.mobile-menu-content {
+    background: var(--color-beige-50);
+    width: 280px;
+    height: 100%;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    padding: 2rem 1.5rem;
+}
+
+.mobile-menu.active .mobile-menu-content {
+    transform: translateX(0);
+}
+
+.mobile-nav-link {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    color: var(--color-gray-700);
+    text-decoration: none;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.mobile-nav-link:hover, .mobile-nav-link.active {
+    background: var(--color-beige-200);
+    color: var(--color-accent-primary);
+}
+
+.hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+.hamburger span {
+    width: 25px;
+    height: 3px;
+    background: var(--color-gray-700);
+    margin: 3px 0;
+    transition: 0.3s;
+    border-radius: 2px;
+}
+
+/* Bottom navigation pour mobile */
+.bottom-nav {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--color-beige-50);
+    border-top: 1px solid var(--color-beige-200);
+    padding: 0.75rem 0;
+    z-index: 50;
+}
+
+.bottom-nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: var(--color-gray-500);
+    padding: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.bottom-nav-item.active {
+    color: var(--color-accent-primary);
+}
+
+.bottom-nav-icon {
+    font-size: 1.25rem;
+    margin-bottom: 0.25rem;
+}
+
+.bottom-nav-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+/* Styles responsives */
+@media (max-width: 768px) {
+    /* Cache la navigation desktop */
+    .navbar .nav-links,
+    .navbar .flex.space-x-1 {
+        display: none !important;
+    }
+    
+    /* Affiche le menu hamburger */
+    .hamburger {
+        display: flex;
+        order: -1;
+        margin-right: 0.5rem;
+    }
+    
+    /* Affiche la navigation bottom sur mobile */
+    .bottom-nav {
+        display: flex;
+    }
+    
+    /* Ajustements de la navbar */
+    .navbar {
+        padding: 0;
+    }
+    
+    .navbar .max-w-6xl {
+        padding: 0.75rem 1rem;
+    }
+    
+    .navbar .flex.justify-between {
+        align-items: center;
+    }
+    
+    .navbar .flex.items-center.space-x-3 {
+        gap: 0.5rem;
+    }
+    
+    .nav-brand {
+        font-size: 1.1rem;
+        margin-left: 0.5rem;
+    }
+    
+    /* Cache les informations utilisateur étendues sur mobile */
+    .user-info-desktop {
+        display: none;
+    }
+    
+    /* Ajuste la taille des avatars */
+    .user-avatar {
+        width: 2rem !important;
+        height: 2rem !important;
+        font-size: 0.875rem !important;
+    }
+    
+    /* Ajoute du padding bottom pour éviter le chevauchement avec la bottom nav */
+    main {
+        padding-bottom: 6rem;
+    }
+    
+    /* Ajuste les conteneurs */
+    .max-w-6xl {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}
+
+/* Animations d'ouverture/fermeture du burger menu */
+.hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -6px);
+}
